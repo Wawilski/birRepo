@@ -1,0 +1,179 @@
+NetworkX
+
+Invariant de graphe
+_________________________________________
+
+Moyenne et Variance des degrés de sommets de graphe
+
+1- calculer Moyenne et Variance des noeuds d'un graphe donné (done)
+2- faire des tests 
+  créer des graphes randoms et si isomorphes regarder si même moyenne et même variance
+
+Sachant que c'est bien un invariant:
+  invariant = quantité qui est la meme pour tout graphe isomorphe  
+
+  isomorphe => on peut associer ts les sommets d'un graphe G vers un graphe H et garde les arêtes
+
+
+  sachant ça cela signifie que pour un sommet a de G, le sommet associé f(a) dans H possèdent le même nombre d'arrete et donc le meme degré
+  et ce pour toutes les arretes. Si toutes les aretes on le meme degré entre 2 graphes alors la moyenne ne change pas car le meme nombre de noeud et les memes degrés
+  comme la moyenne change pas et le degré change pas on est good
+
+
+  Moyenne plus fort encore, si 2 graphes ont le meme nombre d'arete alors la moyenne des degrés est égale
+  Logique en soit car une arete = 2 degrés distribués parmis les nodes et ce peut importe les nodes en questions
+  et la moyenne additionne tous les degrés des noeuds donc sil y a une aretes qui change d'un noeud a un autre on a quand meme la meme moyenne des degrés comme lentrant dans lancien nodes
+  juste se déplace
+
+  Variance par contre que si isomorphes parce que les degrés respectifs des noeuds comptent
+
+
+PRENDRE GRAPHES DU MAIL AVEC SIGNATURES CANONIQUES
+CALCULER VALEUR DE VARIANCE POUR CHACUN
+PRINT SINGATURE CANONIQUE ET VARIANCE
+
+Bcp de valeurs: 12293434 values
+Variance !=> iso
+iso => Variance
+_________________________________________
+
+Circonference d'un graphe girth = plus court cycle
+Deja implémenté mais implemente le
+
+PLUS COURT CYCLE:
+
+parcours en partant de chaque node on prend le plus court
+
+BFS et dès qu'on tombe sur le node on prend la value
+
+=================================================
+Jour 2: treewidth
+================================================
+Plus petite decomposition
+
+
+---pas bonne méthode heuristique---
+Prend le gros TAS avec tous les nodes
+au fur et a mesure on prend celui qui à le plus petit degré et on regarde a qui il est connecté dans le grand ensemble si cest possible on le retire et on ajoute un
+node avec tous ses voisins
+On continue dans que cest possible puis on passe sur un des noeuds créés et à la chaine 
+
+
+--Naif--
+tu prends tous les sous ensembles et tu composes pour voir si ca marche
+Remarque de non tree
+
+SI 2 eleement d'un noeud appartiennent a 2 noeud differents et 1 elemennt commun entre les 2 => merge
+Ex:
+  AB BC AC => ABC
+
+Si double paire A B B A, A C C A Merge à 4
+
+  BC CE BD DE => BCDE
+
+=> premier tri 
+Pour toutes les aretes checker si triangles dans ce cas il y a d'office un noeud qui contient les 3
+Probablement plus long que de try
+
+
+
+Naive method mais pas trop
+
+Tous les sous ensembles possibles
+commence par Sous ensemlbes plus petits (aretes)
+
+On part d'une arete et on la link avec une possible 
+si pas possible de link avec arete voisine merge les 2
+
+si en ajoutant voisin on tombe sur un cycle
+on prend ceux qui ont un commun on les mergent et le chiant on le met au milieu en ajoutant les commun des 2 merges
+Marche pas
+
+Naive method ++
+On prend les ensembles d'arretes avec 2 item par node
+puis 3 puis 4 ... 
+- dès qu'on trouve un cycle on switch de possibilité et au bout d'un moment on atteindra bien un truc
+- dès qu'on trouve une solution on est bon
+sachant que peut pas dépasser n-1 item par noeud et peut pas etre en dessous de n-1 noeuds(nombre d'arrete)
+        
+
+
+=================================================
+Jour 3: TreeWidth: le retour
+=================================================
+
+
+-- Ca ne lest pas --
+Analyse de cliques voir si cest plus simple ou pas
+
+TreeWidth = taille de la plus grande clique dans le chordal graph qui contient G avec le plus petit nombre de clique
+
+Graph cordal: graphe avec pour chaque cycle de 4 ou plus à au moins une corde qui connecte 2 node du circuit
+
+
+MEthod naive mais pas trop
+Creation de tous les noeuds necessaire pour un certains K 
+tentative de connection en ajoutant des noeuds, si marche pas switch et faire toutes les possibilités pour un k donné
+
+Si 2 et cycle on switch instant
+
+Pour petits seems fine pour 10 complex
+
+
+
+OK final algo from Melo
+
+
+Logique algo
+
+Algorithme naif, on va faire toutes les possibilités mais de maniere intelligente
+
+Soit:
+-G un graph dont on veut connaitre la treewidth, 
+ses nodes sont numérotées de 0 à n, n le nombre de node 
+
+o_perm correspond a la liste des nodes de G, numérotés selon un certain ordre,
+cette variable permettra de stocker les permutations des nodes
+
+L'algo suit la logique suivante:
+  
+  Nous allons créer un nouveau graphe, C, copie de G, sauf que nous allons renommés les sommets selon o_perm
+  Cela permettra par la suite d'explorer les aretes des noeuds dans un ordre different à chaque itération
+  permettant d'explorer toutes les possibilités de treeDecomposition
+  
+  Après avoir créé ce graphe C, nous allons calculer le degré Maximum dans C, nMaxDeg
+  Ce degré nous permettra de connaitre la width de l'arbre
+
+  Pour ce faire nous allons explorer les noeuds de C dans l'ordre numérique
+  Pour chaque noeud i nous allons stocker le degré courant dans nDeg et allons garder en mémoire
+  first, le premier noeud avec qui i à une arete en commun
+  Nous allons donc a partir de i explorer les noeuds dont le numéro est strictement supérieur à i
+  et verifier sil y a une arete, si cest le cas nous incrémentons nDeg et verifions si j est le premier
+  noeud avec qui il y a liaison, si cest le cas nous le stockons dans first sinon nous ajoutons une arete
+  dans C reliant first et j
+
+
+  Cela permetra de gérer les cycles problematiques dans le graphe s'il y en a, en ajoutant cette arrete
+  on ajoute un au degré de j et de first et donc potentiellement la cardinalité des nodes via nDeg et nMaxDeg
+=====
+TODO
+=====
+repo Git 
+
+Continuer ce tree stuff et améliorer efficacité tout ça tout ça
+
+suite
+Comparaison defficacité RUST
+
+invariants en plus
+  proximity: Minimum de la distance moyenne des sommets du graphe
+  remoteness: Maximum de la distance moyenne des sommets du graphe
+  calculer? tu pars d'un sommet tu fais le plus cours chemin vers tous les sommets et tu stock 
+  en gros BFS et tu gardes les distances à chaque fois tu peux opti en gardant la distance vers les noeuds que t'as deja visit pour les prochains mais pas worth parce que tu devras
+  quand meme calculer
+
+
+
+
+
+
