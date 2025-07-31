@@ -1,14 +1,13 @@
 import networkx as nx
 import matplotlib.pyplot as plt
-import math
 
 def girth(G):
-    girth = math.inf
+    girth = float('inf')
     n = G.number_of_nodes()
 
     for node in G.nodes():
         
-        dist = [math.inf] * n
+        dist = [float('inf')] * n
         prev = [-1] * n
 
         dist[node] = 0

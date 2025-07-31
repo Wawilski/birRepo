@@ -2,6 +2,8 @@ import networkx as nx
 import matplotlib.pyplot as plt
 
 
+#Based on S. Langermann algorithm ----------->
+#Next permutation of an array
 def next(arr):
     pivot = len(arr)-1
     tmp = 0
@@ -27,18 +29,41 @@ def next(arr):
     while j < (first + last)/2 - first:
         arr[first+j],arr[last-j]= arr[last-j],arr[first+j]
         j+=1
-
     return True
 
+
+def minDegree(G):
+    min_degree = float('inf')
+    min_node = -1
+    for node in G.nodes():
+        deg = G.degree(node)
+        if  deg < min_degree:
+            min_degree = deg
+            min_node = node
+    return min_degree,min_node
+
+def MMD(G):
+    H = nx.Graph()
+    H.add_nodes_from(G.nodes())
+    H.add_edges_from(G.edges())
+    maxmin = 0
+    while (H.number_of_edges()>=2):
+        deg,node = minDegree(H)
+        maxmin = max(maxmin,deg)
+        H = nx.restricted_view(H,[node],[])
+    return maxmin
+    
 #Naive method (to upgrade)
-# Work but very very slow for big once
+# Work but very very slow for big ones
 def tree_width(G):
+    counter = 0
     n = len(list(G.nodes()))
     g_edges = list(G.edges())
     o_perm = list(range(n))
     nMinMaxDeg = n
+    lowerBound = MMD(G)
     while True:
-        print(o_perm)
+        counter += 1
         C = nx.Graph()
         C.add_nodes_from(range(n))
         for i in range(n-1):
@@ -47,12 +72,15 @@ def tree_width(G):
                     C.add_edge(o_perm[i],o_perm[j])
         c_edges = list(C.edges())
         nMaxDeg = 0
+
         for i in range(n):
             nDeg = 0
             first = 0
             for j in range(i+1, n):
                 if ((i,j) in c_edges):
                     nDeg += 1
+                    if(nDeg >= nMinMaxDeg):
+                        break
                     if (first > 0):
                         C.add_edge(first,j)
                         c_edges = list(C.edges())
@@ -60,16 +88,18 @@ def tree_width(G):
                         first = j
             if (nDeg > nMaxDeg):
                 nMaxDeg = nDeg
-            if(nMaxDeg >= nMinMaxDeg):
-                continue
+            if(nDeg >= nMinMaxDeg):
+                break
+
         if (nMaxDeg < nMinMaxDeg):
             nMinMaxDeg = nMaxDeg
-        if (nMinMaxDeg == 1):
+        if (nMinMaxDeg <= lowerBound or nMinMaxDeg == 1):
             return nMinMaxDeg
         if not next(o_perm):
             break
     return nMinMaxDeg
 
+# <-----------
 
 #TO FIX AND CLEAN ------>
 
@@ -106,7 +136,7 @@ def shrinking(G):
             T.add_node(counter)
             assign[counter] = new
             neighbors = in_neighbors(node,T,assign,0)
-            if len(neighbors) > 0:
+            if len(neighbors) > 1:
                 for neighbor in neighbors:
                     T.add_edge(counter,neighbor)
                     T.remove_edge(neighbor,0)
@@ -132,43 +162,12 @@ def width(G):
     return max_size(values) - 1
 
 #< ----- TO FIX AND CLEAN
-options = {
-    "font_size": 36,
 
-    "node_size": 3000,
-    "node_color": "white",
-    "edgecolors": "black",
-    "linewidths": 5,
-    "width": 5,
-}
+if __name__ == "__main__":
+    with open("g6Files/middle.g6",'r') as file:
+        f = file.readlines()
+        for line in f:
+            b = bytes(line[1:],"utf-8")
+            G = nx.from_graph6_bytes(b) 
 
-# G = nx.Graph()
-# G.add_nodes_from([0,1,2,3,4])
-# G.add_edges_from([(0,1),(1,2),(1,3),(2,3),(3,4)])
-
-# G = nx.Graph()
-# G.add_nodes_from([0,1,2,3])
-# G.add_edges_from([(0,1),(1,2),(2,3),(0,3)])
-
-#G =nx.Graph()
-#G.add_nodes_from([0, 1, 2, 3, 4, 5,6,7])
-#G.add_edges_from([(0, 1), (0, 2), (1, 5),(1,2), (1,4), (1,6), (2,3), (2, 4), (3, 4),(4,6),(4,7),(5,6),(6,7)]) 
-
-# G = nx.Graph()
-# G.add_nodes_from([0,1,2,3,4,5,6])
-# G.add_edges_from([(0,1),(0,2),(0,3),(1,5),(2,6),(3,4)])
-
-G = nx.petersen_graph()
-# G = nx.from_graph6_bytes(b"I?CWw{^Fw") 
-
-print("------------------") 
-print(f"{G.nodes()}")
-print(f"{G.edges()}")
-print(f"{tree_width(G)}")
-print("------------------") 
-
-nx.draw_networkx(G,**options)
-ax = plt.gca()
-ax.margins(0.20)
-plt.axis("off")
-plt.show()
+            print(f"{line[1:-1]},{tree_width(G)}")

@@ -173,7 +173,36 @@ invariants en plus
   quand meme calculer
 
 
+================================
+Jour 4
+===============================
+
+repo git done
+Proximity & remoteness implementés reste que le g6 file mais apres
+
+a faire:
+tenter de clean tout ce que deja fait
+files g6 full (ff)
+tenter de voir implementation en rust probablement plus fast uk
 
 
+Ameliorer TreeWidth
+  - Trouver borne inferieure et si atteinte alors on stop ? Done et marche bien permet pour certains graphes particuliers de le faire en une itération (exemple dans main avec le grapges à 7 sommets avec que des triangles) ou alors les fully connected graph
+  - Break si on a un degré superieur au minimum (logique) done et is ok ca reduit deja bien (si on considère que le 1er noeud a un degré superieur on gagne n**2 itération cest pas mal)
+  - Ignorer des permutations? un monde ou c'est possible
+
+lower bound sur small
+Economie de 4 secondes 
+lower bound sur middle (que ceux de taille 7)
+avec lower: 32 sec
+sans lower : 2min
+divise le temps par 4 de ce que vu
+
+
+
+Reste à faire:
+Rust
+Encore ptetre améliorer treewidth avec upperbound
+file g6 remoteness & proximity
 
 

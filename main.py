@@ -1,30 +1,44 @@
 import networkx as nx
 import matplotlib.pyplot as plt
-from utils import mean_degree, var_degree, girth
-G =nx.Graph()
-G.add_nodes_from([0, 1, 2, 3, 4, 5])
-G.add_edges_from([(0, 2), (0, 1), (1, 5), (2, 4), (2, 5)]) 
-# H = nx.from_graph6_bytes(b"I?CWw{^Fw") 
+from InvTreeWidth import tree_width,shrinking,width
+from InvProximity import proximity,remoteness
+
+# G =nx.Graph()
+# G.add_nodes_from([0, 1, 2, 3, 4, 5, 6])
+# G.add_edges_from([(0, 2), (0, 1), (0, 3), (1, 4), (2, 5),(3,6)]) 
+# G = nx.from_graph6_bytes(b"F_l~w")
+G = nx.from_graph6_bytes(b"ES\o")
+
+# G = nx.petersen_graph()
+
+
+# G = nx.Graph()
+# G.add_nodes_from([0,1,2,3])
+# G.add_edges_from([(0,1),(1,2),(2,3)])
+
+# G = nx.cycle_graph(5)
+
 print(f"nodes: {G.number_of_nodes()}")
 print(f"edges: {G.number_of_edges()}")
 
 print("------------------") 
 print(f"{G.nodes()}")
 print(f"{G.edges()}")
-print(f"mean_degree G: {mean_degree(G)}")
-print(f"variance_degree G: {var_degree(G)}")
-print(f"girth G: {girth(G)}")
+print(f"degrees G : {[G.degree(x) for x in G.nodes()]}")
+print(tree_width(G))
+# print(f"proximity G: {proximity(G)}")
+# print(f"remoteness G: {remoteness(G)}")
 print("--------------------")
-# print(f"nodes: {H.number_of_nodes()}")
-# print(f"edges: {H.number_of_edges()}")
-# print(f"{H.nodes()}")
-# print(f"{H.edges()}")
-# print(f"mean_degree H: {mean_degree(H)}")
-# print(f"variance_degree H : {var_degree(H)}")
-# print("-------------------")
-# print(nx.is_isomorphic(G,H))
 
-nx.draw(G)
+options = {
+    "font_size": 36,
+    "node_size": 3000,
+    "node_color": "blue",
+    "edgecolors": "black",
+    "linewidths": 5,
+    "width": 5,
+}
+nx.draw(G,**options)
 ax = plt.gca()
 ax.margins(0.20)
 plt.axis("off")
