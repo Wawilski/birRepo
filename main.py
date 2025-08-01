@@ -1,16 +1,17 @@
 import networkx as nx
 import matplotlib.pyplot as plt
 from InvTreeWidth import tree_width,shrinking,width
-from InvProximity import proximity,remoteness
+from InvGirth import girth
 
-# G =nx.Graph()
-# G.add_nodes_from([0, 1, 2, 3, 4, 5, 6])
-# G.add_edges_from([(0, 2), (0, 1), (0, 3), (1, 4), (2, 5),(3,6)]) 
+G =nx.Graph()
+G.add_nodes_from([0, 1, 2, 3, 4, 5, 6])
+G.add_edges_from([(0, 2), (0, 1), (0, 3), (1, 4), (2, 5),(3,6)]) 
 # G = nx.from_graph6_bytes(b"F_l~w")
-G = nx.from_graph6_bytes(b"ES\o")
+#G = nx.from_graph6_bytes(b"ES\o")
 
-# G = nx.petersen_graph()
+#G = nx.petersen_graph()
 
+# G = nx.from_graph6_bytes(b"A_")
 
 # G = nx.Graph()
 # G.add_nodes_from([0,1,2,3])

@@ -206,3 +206,12 @@ Encore ptetre améliorer treewidth avec upperbound
 file g6 remoteness & proximity
 
 
+============================
+Jour 5
+============================
+
+
+Implémentation des graphs, girth et tree_width en rust
+
+
+

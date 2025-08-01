@@ -17,7 +17,7 @@ def girth(G):
         while len(queue) != 0:
             current = queue.pop(0)
             for w in G.neighbors(current):
-                if dist[w] == math.inf:
+                if dist[w] == float('inf'):
                     dist[w] = dist[current] + 1
                     prev[w] = current
                     queue.append(w)

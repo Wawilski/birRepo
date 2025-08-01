@@ -6,7 +6,6 @@ import matplotlib.pyplot as plt
 #Next permutation of an array
 def next(arr):
     pivot = len(arr)-1
-    tmp = 0
     
     while (pivot > 0 and (arr[pivot] < arr[pivot-1])):
         pivot-=1
@@ -56,14 +55,12 @@ def MMD(G):
 #Naive method (to upgrade)
 # Work but very very slow for big ones
 def tree_width(G):
-    counter = 0
-    n = len(list(G.nodes()))
+    n = G.number_of_nodes()
     g_edges = list(G.edges())
     o_perm = list(range(n))
     nMinMaxDeg = n
     lowerBound = MMD(G)
     while True:
-        counter += 1
         C = nx.Graph()
         C.add_nodes_from(range(n))
         for i in range(n-1):
