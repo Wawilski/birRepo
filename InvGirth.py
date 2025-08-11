@@ -1,5 +1,6 @@
 import networkx as nx
 import matplotlib.pyplot as plt
+import time
 
 def girth(G):
     girth = float('inf')
@@ -27,10 +28,16 @@ def girth(G):
 
 
 if __name__ == "__main__":
-    with open("g6Files/graphs2to10.g6",'r') as file:
+    n =0
+    with open("g6Files/small.g6",'r') as file:
         f = file.readlines()
+        start = time.clock_gettime_ns(0)
         for line in f:
             b = bytes(line[1:],"utf-8")
             H = nx.from_graph6_bytes(b) 
-
-            print(f"{line[1:-1]},{girth(H)}")
+            girth(H)
+            # print(f"{line[1:-1]},{girth(H)}")
+            n+=1
+        end = time.clock_gettime_ns(0)
+    print((end-start)/n)
+    print(end-start)

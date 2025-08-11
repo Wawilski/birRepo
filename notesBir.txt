@@ -213,5 +213,65 @@ Jour 5
 
 Implémentation des graphs, girth et tree_width en rust
 
+######################################################
+                  Semaine 2
+######################################################
+
+===========================
+Jour 1
+===========================
+
+Fixing Proximity and Remoteness + faire files (done)
+
+Rust: Implémentation Lower Bound TreeWidth, Proximity and Remoteness
+
+Temps exe
+
+          Tree_width
+Rust          |   Python 
+            Small 
+        Moyenne temps
+0.441927 ms   |   1.472783 ms
+        Global temps
+91.928201 ms  |   313.796831 ms
+
+            Seven         
+        Moyenne temps
+8.761376 ms   |   30.830548 ms
+        Global temps
+9.135605 s    |   32.038462 s
 
 
+
+Implémenter Prox et Remoteness
+
+
+     Proximity/Remoteness
+    (Probablement Probleme)
+Rust          |   Python 
+            Small 
+        Moyenne temps
+0.021859 ms   |   0.038064 ms
+        Global temps
+4.524906 ms  |    7.879252 ms
+
+            Seven         
+        Moyenne temps
+0.034531 ms   |   0.056277 ms
+        Global temps
+36.050836 ms    |   58.753757 ms
+     
+
+            Girth
+Rust          |   Python 
+            Small 
+        Moyenne temps
+0.020546 ms   |   0.029426 ms
+        Global temps
+4.253045 ms  |    6.091343 ms
+
+            Seven         
+        Moyenne temps
+0.031026 ms   |   0.044273 ms
+        Global temps
+32.391704 ms    |  46.221144 ms

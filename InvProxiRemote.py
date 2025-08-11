@@ -1,8 +1,12 @@
 import networkx as nx
 import math
+import matplotlib.pyplot as plt
+import time
 
 def mean_distances(G,node):
     n = G.number_of_nodes()
+    if n == 1 or n == 0:
+        return float("inf")
     visited = [node]
     queue = [node]
     distances=[0] * n
@@ -13,18 +17,47 @@ def mean_distances(G,node):
                 queue.append(neighbor)
                 visited.append(neighbor)
                 distances[neighbor] = distances[current] + 1 
-    return mean = sum(distances)/(n-1)
+    if len(visited) < n:
+        return float("inf")
+    
+    mean = sum(distances)/(n-1)
+    return mean
 
 
 
 def minmax_mean_distance(G, option="proximity"):
-    minmax_dist = 0
+    if option == "proximity":
+        minmax_dist = float("inf")
+    if option == "remoteness":
+        minmax_dist = 0
+    
     n = G.number_of_nodes()
     for node in G.nodes():
         mean = mean_distances(G,node)
-        if mean > minmax_dist && option=="remoteness":
+        if mean > minmax_dist and option=="remoteness":
             minmax_dist = mean
-        if mean < minmax_dist && option=="proximity":
+        if mean < minmax_dist and option=="proximity":
             minmax_dist = mean
+        
     return minmax_dist
 
+
+if __name__ == "__main__":
+    
+    mean = 0
+    n = 0
+    with open("g6Files/seven.g6",'r') as file:
+        f = file.readlines()
+        start = time.clock_gettime_ns(0)
+        for line in f:
+            # start = time.clock_gettime_ns(0)
+            b = bytes(line[1:],"utf-8")
+            G = nx.from_graph6_bytes(b) 
+            minmax_mean_distance(G,'proximity')
+            # end = time.clock_gettime_ns(0)
+            # print(f"{line[1:-1]},{round(minmax_mean_distance(G,'proximity'), 2)}")
+            # mean += (end-start)
+            n+=1
+        end = time.clock_gettime_ns(0)
+    print((end-start)/n)
+    print(end-start)

@@ -31,6 +31,15 @@ impl UGraph{
 
     }
 
+    pub fn clone(&self) -> Self{
+        let nodes = self.nodes.clone();
+        let edges = self.edges.clone();
+        Self{
+            nodes,
+            edges
+        }
+    }
+
     pub fn neighbors(&self,node:i32)->Vec<i32>{
         let mut neighbors:Vec<i32> = vec![];
         for item in self.edges.clone(){
@@ -69,6 +78,36 @@ impl UGraph{
             self.edges.push(i);}
     }
 
+    pub fn remove_node(&mut self,node:i32){
+        let mut nodes = vec![];
+        
+        for i in 0..self.nodes.len(){
+            if self.nodes[i] != node{
+                nodes.push(i.try_into().unwrap());
+            } 
+        }
+        self.nodes = nodes;
+        let mut edges = vec![];
+        
+        for i in 0..self.edges.len(){
+            if self.edges[i].0 != node && self.edges[i].1 != node {
+                edges.push(self.edges[i]);
+            }
+        }
+        self.edges = edges;
+    }
+    pub fn min_degree(&self) -> (i32,i32) {
+        let mut min_degree = -1;
+        let mut min_node = -1;
+        for node in self.nodes.clone(){
+            let deg = self.degree(node);
+            if deg < min_degree || min_degree == -1 {
+                min_degree = deg;
+                min_node = node;
+            }
+        }
+        (min_degree,min_node)
+    }
 }
 
 

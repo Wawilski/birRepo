@@ -46,12 +46,26 @@ impl Permutation{
 }
 
 
+pub fn mmd(g:&UGraph) -> i32 {
+    let mut h = g.clone();
+    let mut maxmin = 0;
+    while h.number_of_nodes()>=2 {
+        let (deg,node) = h.min_degree();
+        maxmin = if maxmin > deg {maxmin} else {deg};
+        h.remove_node(node);
+    }
+    maxmin
+
+}
+
+
 
 pub fn tree_width(g:UGraph)->i32{
     let n = g.number_of_nodes();
     let g_edges = g.edges.clone();
     let mut o_perm = Permutation::new(n);
     let mut n_min_max_deg = n;
+    let lower_bound = mmd(&g); 
 
     loop {
         let mut c = UGraph::new_n_graph(n,vec![]);
@@ -88,17 +102,15 @@ pub fn tree_width(g:UGraph)->i32{
         if n_max_deg < n_min_max_deg{
             n_min_max_deg = n_max_deg;
         }
+        if n_min_max_deg <= lower_bound || n_min_max_deg == 1 {
+            return n_min_max_deg;
+        }
 
         if !o_perm.next(){
             break;
         }
     }
-    
-n_min_max_deg
-
-
-
-
+    n_min_max_deg
 }
 
 

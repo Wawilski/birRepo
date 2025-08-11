@@ -1,4 +1,5 @@
 import networkx as nx
+import time
 import matplotlib.pyplot as plt
 
 
@@ -160,11 +161,18 @@ def width(G):
 
 #< ----- TO FIX AND CLEAN
 
+
 if __name__ == "__main__":
-    with open("g6Files/middle.g6",'r') as file:
+    mean = 0
+    n = 0
+    with open("g6Files/small.g6",'r') as file:
         f = file.readlines()
+        start = time.clock_gettime_ns(0)
         for line in f:
             b = bytes(line[1:],"utf-8")
             G = nx.from_graph6_bytes(b) 
+            tree_width(G)
 
-            print(f"{line[1:-1]},{tree_width(G)}")
+            # print(f"{line[1:-1]},{tree_width(G)}")
+        end = time.clock_gettime_ns(0)
+    print(end-start)
