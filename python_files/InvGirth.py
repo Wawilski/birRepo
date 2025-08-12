@@ -26,18 +26,3 @@ def girth(G):
                     girth = min(girth, dist[w] + dist[current] + 1)
     return girth
 
-
-if __name__ == "__main__":
-    n =0
-    with open("g6Files/small.g6",'r') as file:
-        f = file.readlines()
-        start = time.clock_gettime_ns(0)
-        for line in f:
-            b = bytes(line[1:],"utf-8")
-            H = nx.from_graph6_bytes(b) 
-            girth(H)
-            # print(f"{line[1:-1]},{girth(H)}")
-            n+=1
-        end = time.clock_gettime_ns(0)
-    print((end-start)/n)
-    print(end-start)

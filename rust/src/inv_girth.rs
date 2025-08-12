@@ -17,16 +17,16 @@ pub fn girth(g:UGraph) -> Option<i32> {
 
         while queue.len() != 0 {
             let current = queue.pop_front().expect("REASON");
-            for w in g.neighbors(current){
-                let index:usize = w.try_into().unwrap();
+            for w in g.neighbors.get(&current).unwrap().iter(){
+                let index:usize = <i32 as TryInto<usize>>::try_into(*w).unwrap();
                 let current_index:usize = current.try_into().unwrap();
 
                 if dist[index] ==n+1 {
                     dist[index] = dist[current_index] + 1;
                     prev[index] = current;
-                    queue.push_back(w);
+                    queue.push_back(*w);
                 }
-                if prev[index] != current && prev[current_index] != w{
+                if prev[index] != current && prev[current_index] != *w{
                     girth = cmp::min(girth, dist[index] + dist[current_index] + 1);
                 }
             }

@@ -275,3 +275,49 @@ Rust          |   Python
 0.031026 ms   |   0.044273 ms
         Global temps
 32.391704 ms    |  46.221144 ms
+            
+          Variance
+Rust          |   Python 
+            Small 
+        Moyenne temps
+0.009553 ms   |   0.016899 ms
+        Global temps
+1.977510 ms  |    3.498293 ms
+
+            Seven         
+        Moyenne temps
+0.010675 ms   |   0.021364 ms
+        Global temps
+11.145605 ms    |  22.304676 ms
+
+
+=======================================
+  Jour 2
+======================================
+
+Recap:
+  Invariants en python et en rust
+    Variance
+    Girth (circonférence)
+    Proximity
+    Remoteness
+    Tree Width
+  Comparaison des temps d'exe des algos
+    Rust toujours plus rapide meme si ptetre améliorable
+
+#TODO
+  CLEAN CODE ET AMELIORER STUFF
+  SIGNER CONTRAT
+  
+Rust Cleaned au max du possible
+
+AMELIORER TREE WIDTH
+
+
+Ok upperbound
+
+tw(G) < |S| + max(tw(G_i))
+
+
+=> Retire vertices puis prends la tailles des sous graph de G - S - 1 pour leur tw
+ca créra un upperbound qui sera impossible d'aller au dessus
