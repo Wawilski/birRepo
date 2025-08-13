@@ -321,3 +321,41 @@ tw(G) < |S| + max(tw(G_i))
 
 => Retire vertices puis prends la tailles des sous graph de G - S - 1 pour leur tw
 ca créra un upperbound qui sera impossible d'aller au dessus
+
+=====================================
+Jour 3
+=====================================
+
+ALGORITHMES A EXPLO
+
+Arnborg et al. O(n^k+2) Pour dire si tree width de taille au plus k <= en vrai à l'ai sympa O(2^n) pour un k donné
+
+Farni et al. && Villanger Use Separator et cliques (vu hier takapté) O(1.9^n) pour Farni et un peu moins pour VIllanger <= Peut etre sympa mais disent dur à implementer
+
+Paper Found <= Linear Ordering Vertices tq specific measure of cost as small as possible O(2^n) jsp ce que ca signifie mais ca à l'air marrant
+
+
+
+Propal intéressantes 
+
+soit G = (V,E), k entier
+
+1. tw(G) =k
+<=>
+2. G a triangulation H = (V,F) avec max taille de clique = k +1
+<=>
+3. Same que 2 mais H triangulation minimale
+
+
+Tenter a implémenté 
+Recursive Algo O(4^n) mieux que l'autre en O(n!)
+  Calculer 2 choses:
+    Q(L,v) = |{w from V - S - {v}| path between v and w dans G[S U {v,w}]}|
+    Subsets de S, S' avec |S'| = |S|/2
+
+Ok implémenté mais à debuguer
+
+Demain 
+  Debuguer parce que stack overflow
+  Check reste des algos du papier
+  Si le temps check Arnborg
