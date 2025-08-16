@@ -3,7 +3,7 @@ use std::collections::VecDeque;
 use itertools::Itertools;
 
 
-fn in_path(g:&UGraph,s:Vec<i32>,v:i32)->Vec<i32>{
+fn in_path(g:&UGraph,s:&Vec<i32>,v:i32)->Vec<i32>{
     let mut in_path:Vec<i32> = vec![v];
     let mut visited = vec![v];
     let mut queue = VecDeque::new();
@@ -26,7 +26,7 @@ fn in_path(g:&UGraph,s:Vec<i32>,v:i32)->Vec<i32>{
     in_path
 }
 
-pub fn out_path(g:&UGraph,l:Vec<i32>,v:i32)-> i32{
+pub fn out_path(g:&UGraph,l:&Vec<i32>,v:i32)->i32{
     let mut out:Vec<i32> = vec![];
     for node in g.nodes.iter(){
         if !l.contains(node) && v != *node {
@@ -48,43 +48,50 @@ pub fn out_path(g:&UGraph,l:Vec<i32>,v:i32)-> i32{
 }
 
 
-pub fn tree_width_rec(g:&UGraph,l:&Vec<i32>,s:Vec<i32>) -> i32{
-    let n = g.nodes.len();
-    let l_cl = l.clone();
-    let s_cl = s.clone();
-    let sub_size:usize = s.len()/2;
+pub fn tree_width_rec(g:&UGraph,l:&Vec<i32>,s:&Vec<i32>) -> i32{
+    let n = s.len();
     if s.len() == 1 {
-        return out_path(g,l_cl,s[0]);
+        return out_path(g,l,s[0]);
     }
-    let mut opt = n;
-    for sub in s.into_iter().combinations(sub_size){
-        let (new_l,new_s) = transfer(&s_cl,&l_cl,(*sub).to_vec());
-        
-        let v1 = tree_width_rec(g,&l_cl,(*sub).to_vec());
-        let v2 = tree_width_rec(g,&new_l,new_s);
+    let mut opt = g.nodes.len();
+    let iterator = s.iter().combinations(n/2);
+
+    for item in iterator{
+        let vec = convert(item);
+        let (new_s,new_l) = transfer(s,l,&vec);
+
+        let v1 = tree_width_rec(g,l,&vec);
+        let v2 = tree_width_rec(g,&new_l,&new_s);
         
         let max = if v1 > v2 {v1} else {v2};
         if (max as usize) < opt{
             opt = max as usize;
-        } 
+        }
     }
     opt as i32
 
 }
 
+pub fn convert(v:Vec<&i32>) -> Vec<i32>{
+    let mut ret = vec![];
+    for item in v{
+        ret.push(*item);
+    }
+    ret
+}
 
-pub fn transfer(s:&Vec<i32>,l:&Vec<i32>,sub:Vec<i32>) -> (Vec<i32>,Vec<i32>) {
+pub fn transfer(s:&Vec<i32>,l:&Vec<i32>,sub:&Vec<i32>) -> (Vec<i32>,Vec<i32>) {
     let mut new_s = vec![];
     let mut new_l = l.clone();
     for i in sub.iter() {
         new_l.push(*i);
     }
     for j in s.iter(){
+        // println!("s {:?}",s);
+        // println!("sub {:?}",sub);
         if !sub.contains(j){
             new_s.push(*j);
         }
     }
     (new_s,new_l)
 }
-
-

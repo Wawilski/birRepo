@@ -359,3 +359,27 @@ Demain
   Debuguer parce que stack overflow
   Check reste des algos du papier
   Si le temps check Arnborg
+
+=====================================
+Jour 4
+====================================
+Recursif done 
+
+          Tree_width
+tree_width    |  tree_width_rec (non opti)
+            Small 
+        Moyenne temps
+0.441927 ms   | 1.547482 ms
+         Global temps
+91.928201 ms  | 320.328936 ms
+
+
+            Seven         
+        Moyenne temps
+8.761376 ms   | 8.652135 ms
+        Global temps
+9.135605 s    | 9.032829 s
+
+
+meme si pas optimisé il s'améliore quand on monte en taille et rattrape le tree_width par defaut
+

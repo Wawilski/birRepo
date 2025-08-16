@@ -13,7 +13,7 @@ impl UGraph{
     pub fn new() -> Self{
         let nodes:Vec<i32> = vec![];
         let edges:Vec<(i32,i32)> = vec![];
-        let mut neighbors:HashMap<i32,Vec<i32>>=HashMap::new();
+        let neighbors:HashMap<i32,Vec<i32>>=HashMap::new();
         Self{
             nodes,
             edges,
