@@ -380,6 +380,129 @@ tree_width    |  tree_width_rec (non opti)
         Global temps
 9.135605 s    | 9.032829 s
 
+2030029038
+1²944472
 
 meme si pas optimisé il s'améliore quand on monte en taille et rattrape le tree_width par defaut
 
+######################################################
+                  Semaine 3
+######################################################
+
+===========================
+Jour 1
+===========================
+
+TODO
+
+Files par taille de graph
+Ameliorer tree_width_rec
+=> Memoization
+Regarder pour dernier algo voir et puis on focus sur les reuultats
+
+
+          Tree_width
+tree_width    |  tree_width_rec (Memoization)
+            Small 
+        Moyenne temps
+0.441927 ms   | 1.867978 ms
+         Global temps
+91.928201 ms  | 386.671558 ms
+
+            Seven         
+        Moyenne temps
+8.761376 ms   | 1.952684 ms
+        Global temps
+9.135605 s    | 2.038602 s
+
+            Middle         
+        Moyenne temps
+179.587503 ms   | 2.636544 ms
+        Global temps
+40 min 4.676 674 494s    | 35.303325 s
+
+
+          Tree_width
+tree_width    |  tree_width_rec (Memoization + MMD)
+            Small 
+        Moyenne temps
+0.441927 ms   | 0.479100 ms
+         Global temps
+91.928201 ms  | 99.173880 ms
+
+            Seven         
+        Moyenne temps
+8.761376 ms   | 0.896933 ms
+        Global temps
+9.135605 s    | 936.398691 ms
+
+            Middle         
+        Moyenne temps
+179.587503 ms   | 1.776539 ms
+        Global temps
+40 min 4s       | 23.787864 s
+
+
+ANALYSE TAILLE PAR TAILLE
+
+
+
+tree_width    |  tree_width_rec (Memoization + MMD)
+
+              Two
+        Moyenne temps
+0.014 799 ms  | 0.021 214 ms
+        Global temps
+0.029 599 ms  | 0.042 428 ms
+
+            Three         
+        Moyenne temps
+0.014 293 ms  | 0.023 462 ms
+        Global temps
+0.057 172 ms    | 0.093 849 ms
+
+
+            Four         
+        Moyenne temps
+0.016 560 ms   | 0.028 785 ms
+        Global temps
+0.182 166 ms    | 0.316635 ms
+
+            Five        
+        Moyenne temps
+0.069 365 ms  | 0. 099 680 ms
+        Global temps
+2.358 443 ms   | 3. 389 151 ms
+
+            Six         
+        Moyenne temps
+0.896 419 ms   | 0.590 637 ms
+        Global temps
+139. 841 403 ms    | 92. 139 523 ms
+            Seven         
+        Moyenne temps
+8.761376 ms   | 0.896933 ms
+        Global temps
+9.135605 s    | 936.398691 ms
+
+            Eight         
+        Moyenne temps
+232748185 ns   | 1. 854 979 ms
+        Global temps
+2873509094801 ns    | 22. 901 575 s
+
+            Nine         
+        Moyenne temps
+8.761376 ms   | 27.570 514 ms
+        Global temps
+9.135605 s    | 2h 06 min 12 s 738 127 317 
+
+              Ten
+        Moyenne temps
+8.761376 ms   | 0.896933 ms
+        Global temps
+9.135605 s    | 936.398691 ms
+
+
+2873509094801
+232748185

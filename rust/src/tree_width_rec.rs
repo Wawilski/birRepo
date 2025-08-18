@@ -1,7 +1,8 @@
 use crate::graph::UGraph;
 use std::collections::VecDeque;
 use itertools::Itertools;
-
+use std::collections::HashMap;
+use crate::inv_tree_width::mmd;
 
 fn in_path(g:&UGraph,s:&Vec<i32>,v:i32)->Vec<i32>{
     let mut in_path:Vec<i32> = vec![v];
@@ -46,29 +47,46 @@ pub fn out_path(g:&UGraph,l:&Vec<i32>,v:i32)->i32{
     }
     q
 }
+pub fn tree_width_rec(g:&UGraph) -> i32{   
+    let mut mem: HashMap<Vec<i32>,i32> = HashMap::new();
+    let mmd = mmd(g);
+    tree_width(&g,&vec![],&g.nodes,&mut mem,mmd)
+}
 
-
-pub fn tree_width_rec(g:&UGraph,l:&Vec<i32>,s:&Vec<i32>) -> i32{
+pub fn tree_width(g:&UGraph,l:&Vec<i32>,s:&Vec<i32>,mem:&mut HashMap<Vec<i32>,i32>,mmd:i32) -> i32{
     let n = s.len();
+    let scl = s.clone();
     if s.len() == 1 {
-        return out_path(g,l,s[0]);
+        mem.entry(scl).or_insert(out_path(g,l,s[0]));
+        return *mem.get(s).unwrap();
     }
-    let mut opt = g.nodes.len();
+    if s.len() == 2 {
+        if mem.contains_key(&scl){
+            return *mem.get(s).unwrap();
+        }
+    }
+    let mut opt:i32 = g.nodes.len() as i32;
     let iterator = s.iter().combinations(n/2);
 
     for item in iterator{
         let vec = convert(item);
         let (new_s,new_l) = transfer(s,l,&vec);
 
-        let v1 = tree_width_rec(g,l,&vec);
-        let v2 = tree_width_rec(g,&new_l,&new_s);
+        let v1 = tree_width(g,l,&vec,mem,mmd);
+        let v2 = tree_width(g,&new_l,&new_s,mem,mmd);
         
         let max = if v1 > v2 {v1} else {v2};
-        if (max as usize) < opt{
-            opt = max as usize;
+        if max < opt{
+            opt = max;
+        }
+        if vec.len() == 2 {
+            mem.insert(vec,opt);
+        }
+        if opt <= mmd || opt == 1 {
+            return opt;
         }
     }
-    opt as i32
+    opt
 
 }
 
@@ -95,3 +113,18 @@ pub fn transfer(s:&Vec<i32>,l:&Vec<i32>,sub:&Vec<i32>) -> (Vec<i32>,Vec<i32>) {
     }
     (new_s,new_l)
 }
+
+
+
+// pub fn improved_tree_width_rec(g:UGraph, k:i32){
+//     let n = g.number_of_nodes();
+//     if n <= (k+1){
+//         return true;
+//     }
+//     if (k as f32) <= 0.25*n || (k as f32) >= 0.4203*n{
+//         let iterator = g.nodes.iter().combinations(k+1);
+//         for item in iterator{
+//             let vec = convert(item);
+//             }
+//     }
+// }
