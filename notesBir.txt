@@ -487,9 +487,9 @@ tree_width    |  tree_width_rec (Memoization + MMD)
 
             Eight         
         Moyenne temps
-232748185 ns   | 1. 854 979 ms
+8.761376 ms   | 1. 854 979 ms
         Global temps
-2873509094801 ns    | 22. 901 575 s
+9.135605 s    | 22. 901 575 s
 
             Nine         
         Moyenne temps
@@ -504,5 +504,78 @@ tree_width    |  tree_width_rec (Memoization + MMD)
 9.135605 s    | 936.398691 ms
 
 
-2873509094801
-232748185
+
+TREE WIDHT REC AMELIORER 
+
+Probleme dans algo ligne 7 dans le papier ca a pas de sens
+=> normalement and et pas or devrait solve 
+
+
+======================================
+Jour 2
+======================================
+
+Tree Width Rec Amelioré
+
+Implémentation + Temps
+
+Technically O(2^n) => mieux que O(4^n)
+
+
+fill-in graph => G+[W] 
+
+G(V,E) > G'(W,F) > F = paths de v a w qui use des arretes de V-W
+
+
+Tester demain sur plus gros algos
+
+
+OK Algo fait
+
+TO FIX:
+Certaines valeurs sont incorrectes mais peu nombreuse juste elles commencent a pop dans les 7 et 8
+(exemples dans main python)
+
+Theorie MMD il y avait des blems avant sans doute mtn faut fix et verif
+
+Anyway algo semble plus rapide par defaut
+Different Middle 
+
+Correct       Current
+" F?AZO,1" != "F?AZO,2"
+" G??AXg,1" != "G??AXg,2"
+" G???~G,1" != "G???~G,2"
+" G??MPg,1" != "G??MPg,2"
+" G?CBKW,1" != "G?CBKW,2"
+" G??KzW,2" != "G??KzW,3"
+" G?CHM_,1" != "G?CHM_,2"
+" G?@HcK,1" != "G?@HcK,2"
+" G??}Ps,2" != "G??}Ps,3"
+" G??}O{,2" != "G??}O{,3"
+" G?AZVo,2" != "G?AZVo,3"
+" G?@krs,2" != "G?@krs,3"
+" G?BHp{,2" != "G?BHp{,3"
+" G?Aip{,2" != "G?Aip{,3"
+" G?BHvs,2" != "G?BHvs,3"
+" G?AZR{,2" != "G?AZR{,3"
+" G?AZV{,2" != "G?AZV{,3"
+" G?W[jK,2" != "G?W[jK,3"
+" G?GX}W,2" != "G?GX}W,3"
+" G?GZ[w,2" != "G?GZ[w,3"
+" G?oXnK,2" != "G?oXnK,3"
+" G?K]NK,2" != "G?K]NK,3"
+" G?C}R[,2" != "G?C}R[,3"
+" G?EZR[,2" != "G?EZR[,3"
+" G?C}V[,2" != "G?C}V[,3"
+" G?r@pg,2" != "G?r@pg,3"
+" G?KuUK,2" != "G?KuUK,3"
+" G?dcjS,2" != "G?dcjS,3"
+" G?N@m[,2" != "G?N@m[,3"
+" G?rHpk,2" != "G?rHpk,3"
+" G?dcz[,2" != "G?dcz[,3"
+" G?qipk,2" != "G?qipk,3"
+" G?hSz[,2" != "G?hSz[,3"
+
+
+Toujours 1 de difference alors probablement pas non plus inhumain a solve
+Probleme vient de Tree_width_Rec

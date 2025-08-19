@@ -2,7 +2,19 @@ use crate::graph::UGraph;
 use std::collections::VecDeque;
 use itertools::Itertools;
 use std::collections::HashMap;
-use crate::inv_tree_width::mmd;
+
+
+pub fn mmd(g:&UGraph) -> i32 {
+    let mut h = g.clone();
+    let mut maxmin = 0;
+    while h.number_of_nodes()>=2 {
+        let (deg,node) = h.min_degree();
+        maxmin = if maxmin > deg {maxmin} else {deg};
+        h.remove_node(node);
+    }
+    maxmin
+
+}
 
 fn in_path(g:&UGraph,s:&Vec<i32>,v:i32)->Vec<i32>{
     let mut in_path:Vec<i32> = vec![v];
@@ -105,8 +117,6 @@ pub fn transfer(s:&Vec<i32>,l:&Vec<i32>,sub:&Vec<i32>) -> (Vec<i32>,Vec<i32>) {
         new_l.push(*i);
     }
     for j in s.iter(){
-        // println!("s {:?}",s);
-        // println!("sub {:?}",sub);
         if !sub.contains(j){
             new_s.push(*j);
         }
@@ -114,17 +124,130 @@ pub fn transfer(s:&Vec<i32>,l:&Vec<i32>,sub:&Vec<i32>) -> (Vec<i32>,Vec<i32>) {
     (new_s,new_l)
 }
 
+pub fn passing_by(g:&UGraph,s:&Vec<i32>,node:i32)-> Vec<i32>{
+    let mut in_path:Vec<i32> = vec![];
+    let mut visited = vec![node];
+    let mut queue = VecDeque::new();
+    queue.push_back(node);
 
+    while queue.len() != 0{
+        let current = queue.pop_front().expect("REASON");
 
-// pub fn improved_tree_width_rec(g:UGraph, k:i32){
-//     let n = g.number_of_nodes();
-//     if n <= (k+1){
-//         return true;
-//     }
-//     if (k as f32) <= 0.25*n || (k as f32) >= 0.4203*n{
-//         let iterator = g.nodes.iter().combinations(k+1);
-//         for item in iterator{
-//             let vec = convert(item);
-//             }
-//     }
-// }
+        for neighbor in g.neighbors.get(&current).unwrap(){
+            if !visited.contains(&neighbor){
+                if !s.contains(&neighbor){
+                    queue.push_back(*neighbor);
+                }
+                else if node < *neighbor{
+                    in_path.push(*neighbor);
+                }
+                visited.push(*neighbor);
+            }
+        }
+    }
+
+    in_path
+}
+
+pub fn fill_in_graph(g:&UGraph,w:&Vec<i32>) -> UGraph{
+    let mut g_plus = UGraph::new_set_graph(w.clone(),vec![]);
+    for node in w{
+       let path = passing_by(g,w,*node);
+       for item in path.iter(){
+           g_plus.add_edge((*node,*item));
+       }
+    }
+    g_plus
+
+}
+
+pub fn connected_components(g:&UGraph) -> Vec<Vec<i32>>{
+    let mut connected_comp = vec![];
+    let mut visited = vec![];
+    for node in g.nodes.clone(){
+        if !visited.contains(&node){
+            visited.push(node);
+            let mut connex = vec![node];
+            let mut stack = vec![node];
+
+            while stack.len() != 0{
+                let current = stack.pop().expect("REASON");
+
+                for neighbor in g.neighbors.get(&current).unwrap(){
+                    if !visited.contains(&neighbor){
+                        stack.push(*neighbor);
+                        visited.push(*neighbor);
+                        connex.push(*neighbor);
+                    }
+                }
+            }
+        connected_comp.push(connex);
+        }
+    }
+    connected_comp
+}
+
+pub fn improved_tree_width_rec_up(g:&UGraph) -> i32{
+    let mut k = 1;
+    while !improved_tree_width(g,k){
+
+        k += 1;
+    }
+    k-1
+}
+pub fn improved_tree_width_rec_down(g:&UGraph) -> i32{
+    let mut k = g.number_of_nodes();
+    while improved_tree_width(g,k){
+        k -= 1;
+    }
+    k+1
+}
+
+pub fn improved_tree_width(g:&UGraph, k:i32)-> bool{
+    let n = g.number_of_nodes();
+    if n <= (k+1){
+        return true;
+    }
+    let mmd = mmd(g);
+    if (k as f32) <= 0.25*(n as f32) || (k as f32) >= 0.4203*(n as f32){
+        let iterator = g.nodes.iter().combinations((k+1) as usize);
+        for item in iterator{
+            let s = convert(item);
+            let g_wout_s = g.copy_without(&s);
+            let comps = connected_components(&g_wout_s);
+            if comps.clone().into_iter().max_by_key(|x| x.len()).unwrap().len() <=(((n - k)/2) as usize ){  
+                let mut tbool = true;
+                for w in comps{
+                    let mut mem: HashMap<Vec<i32>,i32> = HashMap::new();
+                    tbool = tbool && (tree_width(&g,&vec![],&w,&mut mem,mmd) <= k);
+                }
+                if tbool{
+                    return true;
+                }
+            }
+            
+        }
+
+    }
+    else {
+        let iterator = g.nodes.iter().combinations(((0.4203*(n as f32)) as usize) + 1);
+        for item in iterator {
+            let s = convert(item);
+            let g_wout_s = g.copy_without(&s);
+            let comps = connected_components(&g_wout_s);
+            if comps.clone().into_iter().max_by_key(|x| x.len()).unwrap().len() <=(((n - k)/2) as usize ){  
+                let g_plus = fill_in_graph(g,&s);
+                let mut tbool = improved_tree_width(&g_plus,k);
+                for w in comps{
+                    let mut mem: HashMap<Vec<i32>,i32> = HashMap::new();
+                    tbool = tbool && (tree_width(&g,&vec![],&w,&mut mem,mmd) <= k);
+                }
+                if tbool{
+                    return true;
+                }
+            }
+
+        }
+    }
+    return false;
+}
