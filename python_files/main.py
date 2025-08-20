@@ -8,6 +8,8 @@ import matplotlib.pyplot as plt
 
 if __name__ == "__main__":
     b = bytes("F?AZO","utf-8")
+    # b = bytes("G??it{","utf-8")  
+    # b = bytes("IAHQ\\}}}w","utf-8")
     G = nx.from_graph6_bytes(b) 
     options = {
         "font_size": 36,
@@ -18,6 +20,7 @@ if __name__ == "__main__":
         "width": 5,
     }
     nx.draw_networkx(G,  **options)
+    print(G.edges)
 
 # Set margins for the axes so that nodes aren't clipped
     ax = plt.gca()

@@ -60,22 +60,15 @@ pub fn out_path(g:&UGraph,l:&Vec<i32>,v:i32)->i32{
     q
 }
 pub fn tree_width_rec(g:&UGraph) -> i32{   
-    let mut mem: HashMap<Vec<i32>,i32> = HashMap::new();
     let mmd = mmd(g);
-    tree_width(&g,&vec![],&g.nodes,&mut mem,mmd)
+    tree_width(&g,&vec![],&g.nodes,mmd)
 }
 
-pub fn tree_width(g:&UGraph,l:&Vec<i32>,s:&Vec<i32>,mem:&mut HashMap<Vec<i32>,i32>,mmd:i32) -> i32{
+pub fn tree_width(g:&UGraph,l:&Vec<i32>,s:&Vec<i32>,mmd:i32) -> i32{
     let n = s.len();
     let scl = s.clone();
     if s.len() == 1 {
-        mem.entry(scl).or_insert(out_path(g,l,s[0]));
-        return *mem.get(s).unwrap();
-    }
-    if s.len() == 2 {
-        if mem.contains_key(&scl){
-            return *mem.get(s).unwrap();
-        }
+        return out_path(g,l,s[0]);
     }
     let mut opt:i32 = g.nodes.len() as i32;
     let iterator = s.iter().combinations(n/2);
@@ -84,15 +77,12 @@ pub fn tree_width(g:&UGraph,l:&Vec<i32>,s:&Vec<i32>,mem:&mut HashMap<Vec<i32>,i3
         let vec = convert(item);
         let (new_s,new_l) = transfer(s,l,&vec);
 
-        let v1 = tree_width(g,l,&vec,mem,mmd);
-        let v2 = tree_width(g,&new_l,&new_s,mem,mmd);
+        let v1 = tree_width(g,l,&vec,mmd);
+        let v2 = tree_width(g,&new_l,&new_s,mmd);
         
         let max = if v1 > v2 {v1} else {v2};
         if max < opt{
             opt = max;
-        }
-        if vec.len() == 2 {
-            mem.insert(vec,opt);
         }
         if opt <= mmd || opt == 1 {
             return opt;
@@ -218,8 +208,7 @@ pub fn improved_tree_width(g:&UGraph, k:i32)-> bool{
             if comps.clone().into_iter().max_by_key(|x| x.len()).unwrap().len() <=(((n - k)/2) as usize ){  
                 let mut tbool = true;
                 for w in comps{
-                    let mut mem: HashMap<Vec<i32>,i32> = HashMap::new();
-                    tbool = tbool && (tree_width(&g,&vec![],&w,&mut mem,mmd) <= k);
+                    tbool = tbool && (tree_width(&g,&vec![],&w,mmd) <= k);
                 }
                 if tbool{
                     return true;
@@ -227,7 +216,6 @@ pub fn improved_tree_width(g:&UGraph, k:i32)-> bool{
             }
             
         }
-
     }
     else {
         let iterator = g.nodes.iter().combinations(((0.4203*(n as f32)) as usize) + 1);
@@ -239,8 +227,7 @@ pub fn improved_tree_width(g:&UGraph, k:i32)-> bool{
                 let g_plus = fill_in_graph(g,&s);
                 let mut tbool = improved_tree_width(&g_plus,k);
                 for w in comps{
-                    let mut mem: HashMap<Vec<i32>,i32> = HashMap::new();
-                    tbool = tbool && (tree_width(&g,&vec![],&w,&mut mem,mmd) <= k);
+                    tbool = tbool && (tree_width(&g,&vec![],&w,mmd) <= k);
                 }
                 if tbool{
                     return true;

@@ -579,3 +579,168 @@ Correct       Current
 
 Toujours 1 de difference alors probablement pas non plus inhumain a solve
 Probleme vient de Tree_width_Rec
+
+
+=====================================
+Jour 3
+=====================================
+
+Bug solve tree width REC chercher pourquoi "F?AZO,1" != "F?AZO,2" 
+theorie outpath est pas correct (il marchait des le debut kinda sus)
+
+Memoization marche pas pour ca que ca posait probleme 
+=> Trouver nouveau moyen de memoizer => Pas moyen tjrs des resultats differents
+
+
+tree_width    |  tree_width_rec (MMD)
+
+              Two
+        Moyenne temps
+0.014 799 ms  | 0.028 552 ms
+        Global temps
+0.029 599 ms  | 0.057 105 ms
+
+
+            Three         
+        Moyenne temps
+0.014 293 ms  | 0.026 684 ms
+        Global temps
+0.057 172 ms  | 0.106 736 ms
+
+
+            Four         
+        Moyenne temps
+0.016 560 ms   | 0.029 198 ms
+        Global temps
+0.182 166 ms    | 0.321 188 ms
+
+            Five        
+        Moyenne temps
+0.069 365 ms  | 0. 044 219 ms
+        Global temps
+2.358 443 ms   | 1.437 036 ms
+
+            Six         
+        Moyenne temps
+0.896 419 ms   | 0.176 837 ms
+        Global temps
+139. 841 403 ms    | 27. 586 716 ms
+
+            Seven         
+        Moyenne temps
+8.761376 ms   | 1.056 264 ms
+        Global temps
+9.135605 s    | 1.102 740 s
+
+
+            Eight         
+        Moyenne temps
+8.761376 ms   | 7. 236 091 ms
+        Global temps
+9.135605 s    | 89.336 779 s
+
+
+vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv
+
+            Nine         
+        Moyenne temps
+8.761376 ms   | 27.570 514 ms
+        Global temps
+9.135605 s    | 2h 06 min 12 s 738 127 317 
+
+              Ten
+        Moyenne temps
+8.761376 ms   | 0.896933 ms
+        Global temps
+9.135605 s    | 936.398691 ms
+
+
+
+
+
+tree_width_up| tree_width_down |  tree_width_rec (MMD)
+
+              Two
+        Moyenne temps
+0.030 603 ms  |0.035 224 ms  | 0.028 552 ms
+        Global temps
+0.061 207 ms  |0.070 448 ms  | 0.057 105 ms
+
+            Three         
+        Moyenne temps
+0.049 111 ms  |0.049 345 ms  | 0.026 684 ms
+        Global temps
+0.196 444ms  |0.197 383 ms  | 0.106 736 ms
+
+            Four         
+        Moyenne temps
+0.087 380 ms  |0.077 923 ms   | 0.029 198 ms
+        Global temps
+0.961 182 ms  |0.857 157 ms    | 0.321 188 ms
+
+            Five        
+        Moyenne temps
+0.184 474 ms  |0.161 804 ms  | 0. 044 219 ms
+        Global temps
+6.272 146 ms  |5.501 354 ms   | 1.437 036 ms
+
+
+            Six         
+        Moyenne temps
+0.387 953 ms  |0.306 241 ms   | 0.176 837 ms
+        Global temps
+60. 520 694 ms  |47.773 622 ms    | 27. 586 716 ms
+
+            Seven         
+        Moyenne temps
+0.759 058 ms  |0.566 938 ms   | 1.056 264 ms
+        Global temps
+792.456 825 ms  |591.884 116 ms    | 1.102 740 s
+
+            Eight         
+        Moyenne temps
+1.623 107 ms  |1.171 366 ms   | 7. 236 091 ms
+        Global temps
+20.038 888 962 s  |14. 461 686 s    | 89.336 779 s
+
+          Small_Nine 
+(5000 plus ptt + 5000 pls gds)         
+        Moyenne temps
+3.135 571 ms  |1.818 453 ms  | 17.193 570 ms
+
+       Global temps
+
+31.365 119 s  |18.186 353 s  | 2min51s.987 288 019s
+
+            Nine         
+        Moyenne temps
+3.513 744 ms       |2.408 592 ms           | 27.570 514 ms  
+        Global temps
+16m 5s.113 285 760 |6min 1s 563 398 196    | 2h 06 min 12 s 738 127 317 
+
+            Small Ten        
+        Moyenne temps
+
+9.822 632 ms  |6.660 719 ms   | _____________-
+        Global temps
+8min11s131 631 192 |5 min 33s 035 980 842 | ___________
+
+ESTIMATION DE TEN ~10h Ptetre le faire un jour
+
+On a donc ordre de meilleur au pire
+
+Improved_Rec_Down > Improvec_Rec_Up > Rec_basique > Naive  
+
+
+TWDP ALGORITHM
+ERREUR DANS PSEUDO CODE ARTICLE r' = MAX() pas MIN
+
+==========================================
+Jour 4
+=========================================
+
+TODO fix TWDP + Resultats 
+CLEAN CODES 
+
+
+
