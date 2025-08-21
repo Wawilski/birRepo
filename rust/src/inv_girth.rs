@@ -2,6 +2,9 @@ use std::cmp;
 use std::collections::VecDeque;
 use crate::graph::UGraph;
 
+/**
+ * Compute girth of a given graph
+ * */
 pub fn girth(g:UGraph) -> Option<i32> {
     let n_size:usize = g.number_of_nodes().try_into().unwrap();
     let n = g.number_of_nodes();

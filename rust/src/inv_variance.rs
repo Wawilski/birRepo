@@ -1,5 +1,9 @@
 use crate::graph::UGraph;
 
+/**
+ * Compute the mean of the nodes degree  of a graph
+ */
+
 pub fn mean_degree(g:UGraph)->f32{
     let n = g.number_of_nodes();
     if n < 2{
@@ -11,6 +15,9 @@ pub fn mean_degree(g:UGraph)->f32{
     (count as f32) / (n as f32)
 }
 
+/**
+ * Compute the variance of the nodes degree of a graph
+ */
 pub fn var_degree(g:UGraph)->f32{
     let n = g.number_of_nodes();
     if n < 2 {

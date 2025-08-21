@@ -635,9 +635,10 @@ tree_width    |  tree_width_rec (MMD)
 
             Eight         
         Moyenne temps
-8.761376 ms   | 7. 236 091 ms
+184.561 831 ms   | 7. 236 091 ms
         Global temps
-9.135605 s    | 89.336 779 s
+
+2278. 600 369 402 s    | 89.336 779 s
 
 
 vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv
@@ -714,9 +715,9 @@ tree_width_up| tree_width_down |  tree_width_rec (MMD)
 
             Nine         
         Moyenne temps
-3.513 744 ms       |2.408 592 ms           | 27.570 514 ms  
+3.513 744 ms       |2.364 993 ms           | 27.570 514 ms  
         Global temps
-16m 5s.113 285 760 |6min 1s 563 398 196    | 2h 06 min 12 s 738 127 317 
+16m 5s.113 285 760 |10 min 49s 587 952 796  | 2h 06 min 12 s 738 127 317 
 
             Small Ten        
         Moyenne temps
@@ -743,4 +744,110 @@ TODO fix TWDP + Resultats
 CLEAN CODES 
 
 
+tree_width DP| tree_width_down 
 
+              Two
+        Moyenne temps
+0.024 396 ms  |0.035 224 ms  
+        Global temps
+0.048 793 ms  |0.070 448 ms 
+
+            Three         
+        Moyenne temps
+0.031 099 ms  |0.049 345 ms
+        Global temps
+0.124 398 ms  |0.197 383 ms
+
+            Four         
+        Moyenne temps
+0.075 171 ms  |0.077 923 ms 
+        Global temps
+0.826 888 ms  |0.857 157 ms
+
+            Five        
+        Moyenne temps
+0.252 817 ms  |0.161 804 ms 
+        Global temps
+8.595 779 ms  |5.501 354 ms
+
+            Six         
+        Moyenne temps
+0.766 993 ms  |0.306 241 ms   
+        Global temps
+119.650 969 ms  |47.773 622 ms
+
+            Seven         
+        Moyenne temps
+2.462 354 ms  |0.566 938 ms  
+        Global temps
+2.570 698 153 s  |591.884 116 ms
+
+            Eight         
+        Moyenne temps
+7. 865 497 ms  |1.171 366 ms   
+        Global temps
+1min37 s 107 437 155 |14. 461 686 s
+
+   
+
+          Small_Nine 
+(5000 plus ptt + 5000 pls gds)         
+        Moyenne temps
+26.072 726 ms  |1.818 453 ms  
+       Global temps
+4min 20s 805 485 684  |18.186 353 s 
+
+            Nine         
+        Moyenne temps
+__________ ms       |2.408 592 ms      
+        Global temps |
+__________ | 10min 49s 563 398 196 
+
+Moins bon probablement à cause des comparaisons de liste 
+
+graph2to9 tree_width
+Total = 11min 10s 054 240 803
+Moyenne = 2. 324 430ms
+
+
+
+Comparaison Rust Python le retour
+
+Variance moyenne temps:
+Rust      Python
+
+two:  22864   two:
+three:16802   three:
+four: 14076   four:
+Five: 12567   Five:
+six:  13823   six :
+Seven:14732   Seven:
+Eight:16267   Eight:
+Nine: 17870   Nine:
+Ten:  19809   Ten:
+
+Proximity/Remoteness moyenne temps:
+Rust      Python
+
+two:  20958   two:
+three:16109   three:
+four: 15483   four:
+Five: 21612   Five:
+six:  25196   six :
+Seven:32319   Seven:
+Eight:42360   Eight:
+Nine: 53905   Nine:
+Ten:  70827   Ten:
+
+Girth
+Rust      Python
+
+two:  19889   two:
+three:15396   three:
+four: 15651   four:
+Five: 17933   Five:
+six:  23975   six :
+Seven:30412   Seven:
+Eight:39477   Eight:
+Nine: 49350   Nine:
+Ten:  62474   Ten:

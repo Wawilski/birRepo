@@ -1,4 +1,5 @@
 use crate::graph::UGraph;
+use crate::utils::mmd;
 
 struct Permutation {
     array:Vec<i32>
@@ -46,17 +47,6 @@ impl Permutation{
 }
 
 
-pub fn mmd(g:&UGraph) -> i32 {
-    let mut h = g.clone();
-    let mut maxmin = 0;
-    while h.number_of_nodes()>=2 {
-        let (deg,node) = h.min_degree();
-        maxmin = if maxmin > deg {maxmin} else {deg};
-        h.remove_node(node);
-    }
-    maxmin
-
-}
 
 
 

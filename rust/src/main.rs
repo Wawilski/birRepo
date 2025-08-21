@@ -5,6 +5,7 @@ mod inv_proxi_remote;
 mod inv_variance;
 mod tree_width_rec;
 mod dynamic_tree_width;
+mod utils;
 
 use std::any::type_name;
 use std::time::Instant;
@@ -13,7 +14,7 @@ use inv_girth::girth;
 use inv_tree_width::tree_width;
 use inv_variance::var_degree;
 use inv_proxi_remote::{Options,minmax_mean_distance};
-use tree_width_rec::{out_path,tree_width_rec,fill_in_graph,connected_components,improved_tree_width_rec_down,improved_tree_width_rec_up,improved_tree_width};
+use tree_width_rec::{tree_width_rec,improved_tree_width_rec_down,improved_tree_width_rec_up,improved_tree_width};
 use dynamic_tree_width::twdp;
 use itertools::Itertools;
 use std::fs::File;
@@ -29,18 +30,18 @@ where P: AsRef<Path>, {
 
 fn compare() -> io::Result<()>{
     println!("k");
-    let file_path1 = "middle_down.txt";
-    let file_path2 = "middle_up.txt";
+    let file_path1 = "small_down.txt";
+    let file_path2 = "output_small_dp.txt";
     if let Ok(lines_1) = read_lines(file_path1) {
         println!("in");
         if let Ok(lines_2) = read_lines(file_path2) {
-                
+            println!("here");
 
             let it_1: Vec<_> = lines_1.map_while(Result::ok).collect();
             let it_2 : Vec<_>= lines_2.map_while(Result::ok).collect();
                     
             for i in 0..it_1.len(){
-                if it_1[i][1..] != it_2[i]{
+                if it_1[i] != it_2[i]{
                     println!("{:?} != {:?}",it_1[i],it_2[i]);
                 }
             }
@@ -50,6 +51,7 @@ fn compare() -> io::Result<()>{
     }   
     Ok(())
 }
+
 fn main() -> io::Result<()>{
 
     //let g = UGraph::new_n_graph(4,vec![(0,1),(0,2),(0,3),(1,2),(1,3),(2,3)]);
@@ -62,39 +64,44 @@ fn main() -> io::Result<()>{
     // let var =tree_width_rec(&g,&vec![],&g.nodes,&mut mem);
     // println!("{:?}",mem);
     // println!("{:?}",var);
-    let graph = UGraph::graph_from_g6("F?AZO".to_string());
+    // let graph = UGraph::graph_from_g6("F?AZO".to_string());
     // let graph = UGraph::graph_from_g6("G??it{".to_string());
     // let graph = UGraph::graph_from_g6("IAHQ\\}}}w".to_string());
     // println!("{}",improved_tree_width_rec_down(&graph));
     // println!("{}",tree_width_rec(&graph));
-    println!("{:?}",twdp(graph));
+    // println!("{:?}",twdp(graph));
     
-    // let file_path = "../g6Files/small_nine.g6";
-    // let input = File::open(file_path)?;
-    // let buffered = BufReader::new(input);
-    // let count = buffered.lines().count() as u128;
-    //
-    // if let Ok(lines) = read_lines(file_path) {
-    //     let now = Instant::now();
-    //     for line in lines.map_while(Result::ok) {
-    //
-    //         let graph = UGraph::graph_from_g6((&line[1..]).to_string());
-    //         // println!("{},{:?}",&line[1..],tree_width(graph));
-    //         let var =tree_width_rec(&graph);
-    //         //
-    //         // println!("{},{:?}",&line[1..],tree_width_rec(&graph));
-    //         // let var = minmax_mean_distance(graph,Options::Remoteness);
-    //         // let var = girth(graph);
-    //         // let var = tree_width(graph);
-    //         // let var = improved_tree_width_rec_down(&graph);
-    //         // let var = improved_tree_width_rec_up(&graph);
-    //         // println!("{},{:?}",&line[1..],improved_tree_width_rec_down(&graph));
-    //         // println!("{},{:?}",&line[1..],improved_tree_width_rec_up(&graph));
-    //     }
-    //     let end = now.elapsed().as_nanos();
-    //     println!("{}",end);
-    //     println!("{}",end/count);
-    // }
+    let file_path = "../g6Files/small_nine.g6";
+    // let file_path = "../../ten.g6";
+    let input = File::open(file_path)?;
+    let buffered = BufReader::new(input);
+    let count = buffered.lines().count() as u128;
+
+    if let Ok(lines) = read_lines(file_path) {
+        let now = Instant::now();
+        for line in lines.map_while(Result::ok) {
+
+            let graph = UGraph::graph_from_g6((&line[1..]).to_string());
+            
+            // let var = tree_width(graph);
+            // let var = twdp(graph);
+            // let var = tree_width_rec(&graph);
+            // let var = improved_tree_width_rec_down(&graph);
+            // let var = improved_tree_width_rec_up(&graph);
+            // let var = var_degree(graph);
+            // let var = minmax_mean_distance(graph,Options::Remoteness);
+            // let var = girth(graph);
+
+            println!("{},{:?}",&line[1..],tree_width(graph));
+            // println!("{},{:?}",&line[1..],twdp(graph));
+            // println!("{},{:?}",&line[1..],tree_width_rec(&graph));
+            // println!("{},{:?}",&line[1..],improved_tree_width_rec_down(&graph));
+            // println!("{},{:?}",&line[1..],improved_tree_width_rec_up(&graph));
+        }
+        let end = now.elapsed().as_nanos();
+        println!("{}",end);
+        println!("{}",end/count);
+    }
     Ok(())
     // compare()
     

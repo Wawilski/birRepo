@@ -2,71 +2,31 @@ use crate::graph::UGraph;
 use std::collections::VecDeque;
 use itertools::Itertools;
 use std::collections::HashMap;
+use crate::utils::{mmd,out_path,passing_by};
 
 
-pub fn mmd(g:&UGraph) -> i32 {
-    let mut h = g.clone();
-    let mut maxmin = 0;
-    while h.number_of_nodes()>=2 {
-        let (deg,node) = h.min_degree();
-        maxmin = if maxmin > deg {maxmin} else {deg};
-        h.remove_node(node);
-    }
-    maxmin
 
-}
-
-fn in_path(g:&UGraph,s:&Vec<i32>,v:i32)->Vec<i32>{
-    let mut in_path:Vec<i32> = vec![v];
-    let mut visited = vec![v];
-    let mut queue = VecDeque::new();
-    queue.push_back(v);
-
-    while queue.len() != 0{
-        let current = queue.pop_front().expect("REASON");
-
-        for neighbor in g.neighbors.get(&current).unwrap(){
-            if !visited.contains(&neighbor){
-                if s.contains(&neighbor){
-                    queue.push_back(*neighbor);
-                    in_path.push(*neighbor);
-                }
-                visited.push(*neighbor);
-            }
-        }
-    }
-
-    in_path
-}
-
-pub fn out_path(g:&UGraph,l:&Vec<i32>,v:i32)->i32{
-    let mut out:Vec<i32> = vec![];
-    for node in g.nodes.iter(){
-        if !l.contains(node) && v != *node {
-            out.push(*node);
-        }
-    }
-
-    let s = in_path(g,l,v);
-    let mut q = 0;
-    for w in out.iter(){
-        for neighbor in g.neighbors.get(&w).unwrap(){
-            if s.contains(&neighbor){
-                q += 1;
-                break;
-            }
-        }
-    }
-    q
-}
+/**
+ * Give the tw of a certain graph g
+ */
 pub fn tree_width_rec(g:&UGraph) -> i32{   
     let mmd = mmd(g);
-    tree_width(&g,&vec![],&g.nodes,mmd)
+    _tree_width_rec(&g,&vec![],&g.nodes,mmd)
 }
 
-pub fn tree_width(g:&UGraph,l:&Vec<i32>,s:&Vec<i32>,mmd:i32) -> i32{
+/**
+ * Compute TWR(l,s) for the graph g 
+ * with:
+ *    V vertices of g,
+ *    l[i] != s[i] for all i,
+ *    s is invcude to V,
+ * TWR(l,s) = min[between all pi (linear ordering) of V] max[v in s] | q(l U (pi < v ),v) | 
+ * (see utils::outpath for informations about q)
+ *
+ * As TWR([],V) = tw(g) tehe call in tree_width_rec give the correct three_width of g
+ */
+pub fn _tree_width_rec(g:&UGraph,l:&Vec<i32>,s:&Vec<i32>,mmd:i32) -> i32{
     let n = s.len();
-    let scl = s.clone();
     if s.len() == 1 {
         return out_path(g,l,s[0]);
     }
@@ -77,8 +37,8 @@ pub fn tree_width(g:&UGraph,l:&Vec<i32>,s:&Vec<i32>,mmd:i32) -> i32{
         let vec = convert(item);
         let (new_s,new_l) = transfer(s,l,&vec);
 
-        let v1 = tree_width(g,l,&vec,mmd);
-        let v2 = tree_width(g,&new_l,&new_s,mmd);
+        let v1 = _tree_width_rec(g,l,&vec,mmd);
+        let v2 = _tree_width_rec(g,&new_l,&new_s,mmd);
         
         let max = if v1 > v2 {v1} else {v2};
         if max < opt{
@@ -92,6 +52,9 @@ pub fn tree_width(g:&UGraph,l:&Vec<i32>,s:&Vec<i32>,mmd:i32) -> i32{
 
 }
 
+/**
+ * Convert Vec of &i32 to Vec of i32
+ */
 pub fn convert(v:Vec<&i32>) -> Vec<i32>{
     let mut ret = vec![];
     for item in v{
@@ -100,6 +63,15 @@ pub fn convert(v:Vec<&i32>) -> Vec<i32>{
     ret
 }
 
+/**
+ * s: the vec to transfer from
+ * l: the vec to transfer to
+ * sub: the set of item to transfer
+ *
+ * create 2 list which correspond to:
+ * s without elements from sub
+ * l with elements items from sub
+ */
 pub fn transfer(s:&Vec<i32>,l:&Vec<i32>,sub:&Vec<i32>) -> (Vec<i32>,Vec<i32>) {
     let mut new_s = vec![];
     let mut new_l = l.clone();
@@ -114,31 +86,12 @@ pub fn transfer(s:&Vec<i32>,l:&Vec<i32>,sub:&Vec<i32>) -> (Vec<i32>,Vec<i32>) {
     (new_s,new_l)
 }
 
-pub fn passing_by(g:&UGraph,s:&Vec<i32>,node:i32)-> Vec<i32>{
-    let mut in_path:Vec<i32> = vec![];
-    let mut visited = vec![node];
-    let mut queue = VecDeque::new();
-    queue.push_back(node);
 
-    while queue.len() != 0{
-        let current = queue.pop_front().expect("REASON");
-
-        for neighbor in g.neighbors.get(&current).unwrap(){
-            if !visited.contains(&neighbor){
-                if !s.contains(&neighbor){
-                    queue.push_back(*neighbor);
-                }
-                else if node < *neighbor{
-                    in_path.push(*neighbor);
-                }
-                visited.push(*neighbor);
-            }
-        }
-    }
-
-    in_path
-}
-
+/**
+ *  Create the fill_in_graph of a given graph(V,E) based on w, a set of vertices.
+ *  
+ *  fill_in_graph is as: g_plus(w,F) with (a,b) in F iff path from a to b with only verties from V - w
+ */
 pub fn fill_in_graph(g:&UGraph,w:&Vec<i32>) -> UGraph{
     let mut g_plus = UGraph::new_set_graph(w.clone(),vec![]);
     for node in w{
@@ -151,6 +104,10 @@ pub fn fill_in_graph(g:&UGraph,w:&Vec<i32>) -> UGraph{
 
 }
 
+/**
+ *  Find all connected components from a given graph
+ *
+ */
 pub fn connected_components(g:&UGraph) -> Vec<Vec<i32>>{
     let mut connected_comp = vec![];
     let mut visited = vec![];
@@ -177,6 +134,10 @@ pub fn connected_components(g:&UGraph) -> Vec<Vec<i32>>{
     connected_comp
 }
 
+/**
+ * compute the tree width by searching with ascending values of k
+ *
+ */
 pub fn improved_tree_width_rec_up(g:&UGraph) -> i32{
     let mut k = 1;
     while !improved_tree_width(g,k){
@@ -185,6 +146,10 @@ pub fn improved_tree_width_rec_up(g:&UGraph) -> i32{
     }
     k-1
 }
+/**
+ * compute the tree width by searching with descending values of k
+ *
+ */
 pub fn improved_tree_width_rec_down(g:&UGraph) -> i32{
     let mut k = g.number_of_nodes();
     while improved_tree_width(g,k){
@@ -193,6 +158,10 @@ pub fn improved_tree_width_rec_down(g:&UGraph) -> i32{
     k+1
 }
 
+/**
+ * Tell if there is or not a tree decomposition <= k
+ *
+ */
 pub fn improved_tree_width(g:&UGraph, k:i32)-> bool{
     let n = g.number_of_nodes();
     if n <= (k+1){
@@ -208,13 +177,12 @@ pub fn improved_tree_width(g:&UGraph, k:i32)-> bool{
             if comps.clone().into_iter().max_by_key(|x| x.len()).unwrap().len() <=(((n - k)/2) as usize ){  
                 let mut tbool = true;
                 for w in comps{
-                    tbool = tbool && (tree_width(&g,&vec![],&w,mmd) <= k);
+                    tbool = tbool && (_tree_width_rec(&g,&vec![],&w,mmd) <= k);
                 }
                 if tbool{
                     return true;
                 }
             }
-            
         }
     }
     else {
@@ -227,13 +195,12 @@ pub fn improved_tree_width(g:&UGraph, k:i32)-> bool{
                 let g_plus = fill_in_graph(g,&s);
                 let mut tbool = improved_tree_width(&g_plus,k);
                 for w in comps{
-                    tbool = tbool && (tree_width(&g,&vec![],&w,mmd) <= k);
+                    tbool = tbool && (_tree_width_rec(&g,&vec![],&w,mmd) <= k);
                 }
                 if tbool{
                     return true;
                 }
             }
-
         }
     }
     return false;

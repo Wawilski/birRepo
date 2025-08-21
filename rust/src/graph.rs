@@ -1,5 +1,6 @@
 use petgraph::graph6;
 use std::collections::HashMap;
+use crate::utils::tu32_to_ti32;
 
 #[derive(Clone, Debug)]
 pub struct UGraph {
@@ -49,7 +50,7 @@ impl UGraph{
     
     pub fn graph_from_g6(g6:String) -> Self{
         let (size,edges) = graph6::from_graph6_representation::<u32>(g6);
-        let i32_edges = edges.into_iter().map(|x| {convert(x)}).collect();
+        let i32_edges = edges.into_iter().map(|x| {tu32_to_ti32(x)}).collect();
         Self::new_n_graph(size.try_into().unwrap(),i32_edges)
 
     }
@@ -145,9 +146,6 @@ impl UGraph{
 
 
 
-fn convert(x: (u32,u32)) -> (i32,i32){
-    (x.0 as i32,x.1 as i32 )
-}
 
 pub fn find_neighbors(node:i32,edges:&Vec<(i32,i32)>)->Vec<i32>{
     let mut neighbors:Vec<i32> = vec![];

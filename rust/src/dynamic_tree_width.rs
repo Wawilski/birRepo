@@ -2,8 +2,12 @@ use crate::graph::UGraph;
 use std::collections::VecDeque;
 use itertools::Itertools;
 use std::collections::HashMap;
-use crate::tree_width_rec::out_path;
+use crate::utils::out_path;
 
+
+/**
+ * Compute tree width based on a dynamic programming algorithm
+ */
 
 pub fn twdp(g:UGraph) -> i32 {
     let n = g.number_of_nodes();
@@ -23,7 +27,7 @@ pub fn twdp(g:UGraph) -> i32 {
                     s_x.push(*x);
                     let mut found = false;
                     for item in tw.iter_mut(){
-                        if item.0 == s_x{
+                        if equality(&item.0, &s_x){
                             item.1 = if item.1 > r {r} else {item.1};
                             found = true;
                         }
@@ -38,8 +42,7 @@ pub fn twdp(g:UGraph) -> i32 {
         tw_pred = tw.clone();
     }
     for item in tw.iter(){
-        if item.0 == g.nodes {
-            println!("{:?}",item);
+        if equality(&item.0, &g.nodes) {
             return item.1;
         }
 
@@ -48,6 +51,9 @@ pub fn twdp(g:UGraph) -> i32 {
     
 }
 
+/**
+ * Compute the difference between 2 vec 
+ */
 
 pub fn difference(v:&Vec<i32>,s:&Vec<i32>) -> Vec<i32>{
     let mut diff = vec![];
@@ -57,4 +63,19 @@ pub fn difference(v:&Vec<i32>,s:&Vec<i32>) -> Vec<i32>{
         }
     }
     diff
+}
+
+/**
+ * Tell weither or not 2 vec contains the same values
+ */
+pub fn equality(v:&Vec<i32>,s:&Vec<i32>) -> bool{
+    if v.len() != s.len(){
+        return false;
+    }
+    for item in v.iter(){
+        if !s.contains(item){
+            return false;
+        }
+    }
+    true
 }

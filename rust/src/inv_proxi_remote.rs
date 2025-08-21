@@ -8,6 +8,9 @@ pub enum Options {
     Remoteness,
 }
 
+/**
+ *  Compute the mean of the distances from a given nodes to all other
+ */
 pub fn mean_distances(g:&UGraph,node:i32)-> f32{
     let n = g.number_of_nodes();
     if n < 2 {
@@ -38,6 +41,12 @@ pub fn mean_distances(g:&UGraph,node:i32)-> f32{
 }
 
 
+/**
+ *  Compute the maximum or minimum of the average distances from a given nodes to all other
+ *  Options:
+ *      Proximity -> Minimum
+ *      Remoteness -> Maximum
+ */
 pub fn minmax_mean_distance(g:UGraph, option:Options) -> f32 {
     let n = g.number_of_nodes();
     let mut minmax_dist = (n+1) as f32;
