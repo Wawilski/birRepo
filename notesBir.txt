@@ -641,6 +641,7 @@ tree_width    |  tree_width_rec (MMD)
 2278. 600 369 402 s    | 89.336 779 s
 
 
+
 vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv
 
             Nine         
@@ -851,3 +852,20 @@ Seven:30412   Seven:
 Eight:39477   Eight:
 Nine: 49350   Nine:
 Ten:  62474   Ten:
+
+
+
+================================
+Jour 5
+================================
+
+T   ODO
+Expliquer algo
+finir comparaisons 
+verif veracité une dernière fois
+
+
+WK TODO 
+Run 10 sized graph
+Finir explications algos
+

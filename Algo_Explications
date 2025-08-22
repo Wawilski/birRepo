@@ -1,0 +1,91 @@
+
+Preliminaires;
+  Soit G(V,E) un graphe avec V ensemble des sommets, E ensemble des aretes
+  tw(G) le treewidth de G
+
+  Différentes définitions de tree width:
+    minimum width de toute les décomposition en arbre de G
+    Soient H la triangulation minimale de G, k le tree width de G on a que la taille maximum
+    d'une clique dans H est de taille k+1 
+  
+Probleme d'ordonnancement;
+  TreeWidth peut etre formuler comme un probleme d'ordonnancement
+  sachant qu'un ordonnancement i de G(V,E) est une bijection i:V ->{1,2..|V|} 
+
+  notons i(<,v) lensemble des sommets qui apparaissent avant v dans l'ordonnancement i
+
+  Grâce aux ordonnancement nous pouvons créer des triangulations H de G (montré dans le papier) et donc utiliser la 2e definition du treewidth
+
+  Pour eviter d'utiliser explicitement les triangulations,
+  Sont definis:
+  Pour un certain ordonnancement i: 
+  Soit P(v,w) qui est vrau ssi il y a un chemin de v a w qui n'utilise que des sommets de i(<,w) && i(<,v) -> tjrs vrai si v = w ou (v,w) dans E 
+  Soit R(v) qui est defini comme le nombre de sommets w tq {(i(w) > i(v)) && P(v,w)}
+
+  Il est prouvé dans le papier que tw(G) est <= k ssi il existe un ordonnancement i tq R(v) <= k pour tout v 
+
+En complément nous avons que pour i, R(v) = |Q(i(<,v),v)| avec Q(S,v) le nombre de sommets w appartenant à V-S-{v} tel qu'il existe un chemin de v à w utilisant les uniquement les sommets de S,v et w 
+
+  Nous allons utiliser cette propriété dans nos algorithmes
+  
+  Aussi noous avons
+  TW(S) = min (parmis tous les i ordonnancement de V) max (parmis tous les v dans S) |Q(i(<,v),v)|
+  S étant un subset de V
+  Tel que prouvé dans le papier, on a la propriété que tw(G) = TW(V)
+
+
+==========================================================================
+
+tree_width_rec PAGE 7
+
+Soient L et S des subsets de V disjoints
+
+Definissons TWR(L,S) = min (parmis tous les i ordonnancement de V) max (parmis tous les v dans S) |Q(( L||i(<,v) ),v)|
+
+Ici nous avons que l'ensemble des sommets dans L est avant S dans l'ordonnancement et les sommets qui ne sont ni dans L ni dans S sont apres S.
+
+----------------------------------------
+Lalgorithme tree_width_rec calcule TWR
+
+Il s'agit d'un algorithme recursif avec:
+
+Cas de base S.len() == 1:
+  Si nous avons ce cas, nous a que S = {v} et nous savons que TWR(L,{v}) = Q(L,v) (L contient toutes les valeurs a gauche de v car tous les sommets ni dans L ni dans S sont apres S comme énoncé précédemment) nous pouvons donc dans ce casa retourner la valeur de Q(L,v) 
+Cas général;
+Il est montré dans le papier que TWR(L,S)= min (parmi tout les subsets S' de taille k de S) max{TWR(L,S'),TWR(L || S', S-S')} 
+
+Nous allons donc utiliser cette propriété pour recursivement diminuer la taille de S pour arriver à une taille de 1 et obtenir notre cas de base et ainsi retourner TWR.
+
+Pour obtenir tw(G) via cet algorithme il faut l'appeler sur TW([],V)
+Car ici nous avons TW([],V) = TW(V) = tw(G)
+
+Lalgorithme est en O(4^n) en temps et polynomial en espace 
+
+=========================================================================
+
+TWDP PAGE  10
+################################
+ERREUR ICI 
+
+Ici le pseudo code se trompe en prenant le min{r,q} or dans lexplication de l'algorithme il est bien préciser de prendre le maximum
+################################
+
+
+
+=========================================================================
+
+Improved tree_width_rec PAGE 14
+
+#################################
+ERREUR ICI 
+
+ici dans les 2 partie majeur de l'algorithme la gestion de tbool est incorrecte
+
+tbool veut dire si TOUTES les composantes connexes, notées W, verifient TWR([],W) <=k 
+
+Or ici dans la premiere partie tbool est set à true puis on procede a une boucle sur toutes les composantes avec tbool = tbool OR ...
+cependant si tbool est set à true cette boucle est inutile car tboll = true OR ... dès la premiere itération
+Le probleme peut etre retrouvé dans la 2 eme partie de lalgorithme meme si tbool etait setup recursivement si à un moment tbool donne vrai la boucle devient inutile 
+
+Ici la solution etait juste de remplacer les OR par des AND et cela resolvait le probleme
+#################################
