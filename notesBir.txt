@@ -727,6 +727,7 @@ tree_width_up| tree_width_down |  tree_width_rec (MMD)
         Global temps
 8min11s131 631 192 |5 min 33s 035 980 842 | ___________
 
+
 ESTIMATION DE TEN ~10h Ptetre le faire un jour
 
 On a donc ordre de meilleur au pire
@@ -859,7 +860,7 @@ Ten:  62474   Ten:
 Jour 5
 ================================
 
-T   ODO
+TODO
 Expliquer algo
 finir comparaisons 
 verif veracité une dernière fois
@@ -868,4 +869,35 @@ verif veracité une dernière fois
 WK TODO 
 Run 10 sized graph
 Finir explications algos
+
+Ten 1 tree_width down 
+Global
+33634 600 931 259 ~ 9h
+
+Moyenne
+5.603 353 ms
+
+35748 244 598 254
+5955475
+
+
+###############################
+        SEMAINE 4
+###############################
+
+===============================
+Jour 1
+===============================
+
+
+TODO
+Finir explications algos
+Faire tous les outputs
+--
+Tous les outputs Done
+Explications Algos à pofiner 
+
+Graphiques DOne
+
+Commencer Rapport --> Canva fait
 

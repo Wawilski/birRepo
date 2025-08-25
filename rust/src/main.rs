@@ -71,36 +71,50 @@ fn main() -> io::Result<()>{
     // println!("{}",tree_width_rec(&graph));
     // println!("{:?}",twdp(graph));
     
-    let file_path = "../g6Files/small_nine.g6";
-    // let file_path = "../../ten.g6";
+    // let file_path = "../g6Files/graph2to9.g6";
+    let file_path = "../../graphs2to10.g6";
     let input = File::open(file_path)?;
     let buffered = BufReader::new(input);
     let count = buffered.lines().count() as u128;
 
     if let Ok(lines) = read_lines(file_path) {
-        let now = Instant::now();
+        // let now = Instant::now();
         for line in lines.map_while(Result::ok) {
 
             let graph = UGraph::graph_from_g6((&line[1..]).to_string());
-            
+            let n = graph.number_of_nodes() as f32;
             // let var = tree_width(graph);
             // let var = twdp(graph);
             // let var = tree_width_rec(&graph);
             // let var = improved_tree_width_rec_down(&graph);
             // let var = improved_tree_width_rec_up(&graph);
             // let var = var_degree(graph);
-            // let var = minmax_mean_distance(graph,Options::Remoteness);
             // let var = girth(graph);
 
-            println!("{},{:?}",&line[1..],tree_width(graph));
+
+            // println!("{},{:?}",&line[1..],minmax_mean_distance(graph,Options::Proximity));
+            // println!("{},{:?}",&line[1..],var_degree(graph));
+            // println!("{},{:?}",&line[1..],girth(graph));
+            
+            let var = minmax_mean_distance(graph,Options::Remoteness);
+            if var != n+1.0 {
+            println!("{},{:?}",&line[1..],var);
+
+            // if let Some(var) = girth(graph){
+            //     println!("{},{:?}",&line[1..],var);
+            } else {
+                println!("{},inf",&line[1..]);
+            }
+            //
+            // println!("{},{:?}",&line[1..],tree_width(graph));
             // println!("{},{:?}",&line[1..],twdp(graph));
             // println!("{},{:?}",&line[1..],tree_width_rec(&graph));
             // println!("{},{:?}",&line[1..],improved_tree_width_rec_down(&graph));
             // println!("{},{:?}",&line[1..],improved_tree_width_rec_up(&graph));
         }
-        let end = now.elapsed().as_nanos();
-        println!("{}",end);
-        println!("{}",end/count);
+        // let end = now.elapsed().as_nanos();
+        // println!("{}",end);
+        // println!("{}",end/count);
     }
     Ok(())
     // compare()

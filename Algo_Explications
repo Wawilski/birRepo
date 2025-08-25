@@ -64,17 +64,87 @@ Lalgorithme est en O(4^n) en temps et polynomial en espace
 =========================================================================
 
 TWDP PAGE  10
+
+basé sur le Lemme 5 du papier
+Soit G(V,E) et S ss-ensemble non nul de V
+
+TW(S) = min (parmis les v de S) max{TW(S-{v}),|Q(S-{v},v)|}
+
+sachant que TW(V) = tw(G) noous allons vouloir explorer tous les subsets
+de taille 0 à |V| pour reconstruire TW(V) via le lemme 5
+
+L'algorithme fonctionne donc comme suit 
+Nous allons stocker au fur et a mesure les TW de chaque subsets dans une liste qui va evoluer au fur et a mesure de l'algorithme, appleons la tw_pred
+
+Itintalisons cette liste avec [],-inf qui sera notre cas de base
+ensuite nous allons faire evoluer cette liste en itérant de 1 à |V|
+pour chaque peire S,TW(S) appartenant à tw_pred et pour chacun nous allons ajouter un sommet de V toujours pas present dasn S de sorte à calculer
+T(S+{v}) via la propriété du lemme 5.
+
+Pour améliorer le temps de calcul si q > a un upperbound fixer au préalable nous nallons pas calculer la valeur de TW(S) pour le subset courant cette valeur ne pouvant qu'augmenter
+
+Lorsque nous avons finit d'itérer si nous avons dans la liste TW(V) on retourne sa valeur
+sinon on retourne l'upperbound fixé au préalabl
+
+
+
 ################################
 ERREUR ICI 
 
 Ici le pseudo code se trompe en prenant le min{r,q} or dans lexplication de l'algorithme il est bien préciser de prendre le maximum
 ################################
 
+L'algorithme est en O(2^n) en temps et en espace
 
 
 =========================================================================
 
 Improved tree_width_rec PAGE 14
+
+Pour cet algorithme l'article utilise les propriété suivantes:
+
+G_plus[W]=(W,F) est le fill-in graph de G=(V,E) en créant F tq pour tout v,w dans W (v,w) est dans F ss'il existe un chemin de v a w n'utilisant que les sommets de V-W
+aussi on a que tw(G_plus[W]) = TWR(V-W,W)
+
+Lemme 14
+Lemme 15
+Corollaire 18
+
+
+
+Le but ici de l'algorithme est de déterminer si le treewidth est inférieur ou égal a une valeur k choisie, pour trouver le tree_width il suffit d'iterer sur k 
+pour défninir sa valeur minimal de vérité
+
+
+Ici le cas de base est si k+1 >= nombre de sommets de G (noté |V|), car on sait que la valeur maximal d'un tree_width est |V|- 1 
+
+Le cas général se divise en 2 parties
+
+k not in ]0.25*|V|,0.4203*|V|[
+k in ]0.25*|V|,0.4203*|V|[
+
+chgmnt verif pour subsets si G_plus[S] à un tw d'au plus k 
+Car si k pas dans l'ensemble le tw(G_plus[S]) <= k par defaut 
+
+
+On vérifie si k est tel que  k <= 0.25*|V| ou 0.4203*|V| <= k:
+Si cest le cas
+  On regarde pour chaque subset S de taille r = k + 1
+  Si la taille de chaque composante connexe de G[V-S] est > (|V|+|S|+1)/2
+  On regarde si pour chaque composante connexe 
+    tous les tw des composantes connexes <= k
+    SI cest le cas retourne vrai 
+    si vrai pour aucun subset cest faux
+Le 2e cas est assez similaire sauf que nous prenons r = 0.4203*k
+  On regarde pour chaque subset S de taille r = k + 1
+  On regarde recursivement si le tw de G_plus[S] est au plus k
+ET Si la taille de chaque composante connexe de G[V-S] est > (|V|+|S|+1)/2
+  On regarde si pour chaque composante connexe 
+    tous les tw des composantes connexes <= k
+    SI cest le cas retourne vrai 
+    si vrai pour aucun subset cest faux
+
+  
 
 #################################
 ERREUR ICI 
@@ -89,3 +159,7 @@ Le probleme peut etre retrouvé dans la 2 eme partie de lalgorithme meme si tboo
 
 Ici la solution etait juste de remplacer les OR par des AND et cela resolvait le probleme
 #################################
+
+
+l'algo est polynomial en espace et en O(2.9^n) en temps
+
