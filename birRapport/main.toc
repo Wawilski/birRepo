@@ -1,0 +1,12 @@
+\babel@toc {french}{}\relax 
+\contentsline {section}{\numberline {1}Introduction}{2}{section.1}%
+\contentsline {section}{\numberline {2}Notions de base}{2}{section.2}%
+\contentsline {section}{\numberline {3}Tree Width}{2}{section.3}%
+\contentsline {subsection}{\numberline {3.1}Méthode Naïve}{2}{subsection.3.1}%
+\contentsline {subsection}{\numberline {3.2}Notions Complémentaires}{2}{subsection.3.2}%
+\contentsline {subsection}{\numberline {3.3}Meilleur Algorithme}{2}{subsection.3.3}%
+\contentsline {subsection}{\numberline {3.4}Algorithme Récursif}{3}{subsection.3.4}%
+\contentsline {subsection}{\numberline {3.5}Algorithme Récursif Amélioré}{3}{subsection.3.5}%
+\contentsline {section}{\numberline {4}Autres Invariants}{3}{section.4}%
+\contentsline {section}{\numberline {5}Comparaison Python/Rust}{3}{section.5}%
+\contentsline {section}{\numberline {6}Conclusion}{3}{section.6}%

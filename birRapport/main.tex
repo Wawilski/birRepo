@@ -1,0 +1,130 @@
+\documentclass[a4paper, 12pt]{article}
+\usepackage[french]{babel}
+\usepackage[pdftex]{graphicx}
+\usepackage[T1]{fontenc}
+\usepackage{wrapfig}
+\usepackage{graphicx} 
+\usepackage{algpseudocode}
+\usepackage{algorithm}
+\usepackage{minted}
+\usepackage{hyperref}
+\usepackage{biblatex} %Imports biblatex package
+\addbibresource{Citations.bib} %Import the bibliography file
+\usepackage{amssymb}
+\usepackage{csquotes}
+
+\renewcommand{\algorithmicend}{\textbf{Fin}}
+\renewcommand{\algorithmicif}{\textbf{Si}}
+\renewcommand{\algorithmicthen}{\textbf{alors}}
+\renewcommand{\algorithmicelse}{\textbf{Sinon}}
+\renewcommand{\algorithmicwhile}{\textbf{Tant que}}
+\renewcommand{\algorithmicfor}{\textbf{Pour}}
+\renewcommand{\algorithmicdo}{\textbf{faire}}
+
+\begin{document}
+\begin{titlepage}
+\begin{center}
+{\Large Université de Mons}\\[1ex]
+{\Large Faculté des sciences}\\[1ex]
+{\Large Département d'Informatique}\\[2.5cm]
+
+\newcommand{\HRule}{\rule{\linewidth}{0.3mm}}
+% Title
+\HRule \\[0.3cm]
+{ \LARGE \bfseries Title \\[0.3cm]}
+{ \LARGE \bfseries Rapport de stage d'initiation à la recherche \\[0.1cm]} % Commenter si pas besoin
+\HRule \\[1.5cm]
+
+% Author and supervisor
+\begin{minipage}[t]{0.45\textwidth}
+\begin{flushleft} \large
+\emph{Professeur :}\\
+Hadrien \textsc{Mélot}\\
+\emph{Superviseur :} \\
+Sébastien \textsc{Bonte}\\
+\end{flushleft}
+\end{minipage}
+\begin{minipage}[t]{0.45\textwidth}
+\begin{flushright} \large
+\emph{Auteur :} \\
+William \textsc{Karpinski}\\
+\end{flushright}
+\end{minipage}\\[2ex]
+
+\vfill
+
+% Bottom of the page
+\begin{center}
+\begin{tabular}[t]{c c c}
+\includegraphics[height=1.5cm]{image/logoumons.jpg} &
+\hspace{0.3cm} &
+\includegraphics[height=1.5cm]{image/logofs.jpg}
+\end{tabular}
+\end{center}~\\
+ 
+{\large Année académique 2024-2025}
+
+\end{center}
+\end{titlepage}
+
+\tableofcontents
+
+\newpage
+
+\section{Introduction}
+Ce rapport s'inscrit dans le cadre d'un stage d'initiation à la recherche dans le service d'algorithmie
+dirigé par M.Hadrien Mélot. Dans ce stage, supervisé par Sébastien Bonte, j'ai été ammené à travailler sur plusieurs invariants de graphes, et plus spécifiquement sur le tree width de graphes simple non-orienté.
+
+\section{Notions de base}
+Dans ce rapport, nous allons définir $G$, un graphe simple non-orienté comme étant composé de
+$V$, un ensemble de sommets, et $E$, un ensemble d'arêtes. On définit également l'ordre de G, comme étant
+le nombre de sommets dans $V$ et sa taille, comme le nombre d'arêtes dans $E$.
+
+En théorie des graphes, une décomposition en arbre d'un graphe $G$ est un arbre,
+tel que chaque noeud de celui-ci contient un sous-ensemble de $V$ et possède les propriétés suivantes.
+Soient $T$, une décomposition en arbre de $G$,
+$X_1,...,X_t$, les sous-ensembles de $V$ dans les noeuds de $T$, nous avons que:
+
+\begin{itemize}
+  \item Tous les sommets de $G$ doivent être dans au moins un noeud de $T$
+  \item Si $$ et $$
+\end{itemize}
+
+\section{Tree Width}
+
+
+Explication du tree width
+Tree Decomp
+Tree Width = minimum de toutes les width des tree decomp dun graph
+
+\subsection{Méthode Naïve}
+Enumération de toutes les possibilités de tree decomp
+Extremememnt lent O(n!)
+Ajout d'un lower bound => /4 le temps mais tjrs pas suffisant
+
+\subsection{Notions Complémentaires}
+Prochains algos viennent d'un papier qui introduit quelques notions supplementaire
+Probleme d'ordo linéaire
+TW()
+Q, R, P
+\subsection{Meilleur Algorithme}
+TW(S) = min max{TW(S-{v}),|Q(S-{v},v)|}
+Basé la desus
+\subsection{Algorithme Récursif}
+TWR(L,S) = min max Q(L U i(<,v),v),
+TWR([],V) = TW[V] = tw(G)
+=> Calcule de TWR sur [],V pour trouver tw(G)
+\subsection{Algorithme Récursif Amélioré}
+dit si tw(G) au plus = k
+se base sur les composantes connexes du graphes et si leur tw <= k
+
+\section{Autres Invariants}
+Variance des degres,Proximity/Remoteness,Girth
+\section{Comparaison Python/Rust}
+Rust mieux mais assez bizarrement pas pour proxi et remote
+\section{Conclusion}
+
+
+
+
+\end{document}

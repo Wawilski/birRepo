@@ -1,17 +1,18 @@
 import networkx as nx
 import matplotlib.pyplot as plt
-from InvTreeWidth import tree_width,shrinking,width
+from InvTreeWidth import tree_width
 from InvGirth import girth
-
+from InvProxiRemote import minmax_mean_distance
+from InvVariance import var_degree
 # G =nx.Graph()
 # G.add_nodes_from([0, 1, 2, 3, 4, 5, 6])
 # G.add_edges_from([(0, 2), (0, 1), (0, 3), (1, 4), (2, 5),(3,6)]) 
 # G = nx.from_graph6_bytes(b"F_l~w")
 #G = nx.from_graph6_bytes(b"ES\o")
 
-G = nx.petersen_graph()
+# G = nx.petersen_graph()
 
-# G = nx.from_graph6_bytes(b"A_")
+G = nx.from_graph6_bytes(b"ILCHg||~w")
 
 # G = nx.Graph()
 # G.add_nodes_from([0,1,2,3])
@@ -26,9 +27,12 @@ print("------------------")
 print(f"{G.nodes()}")
 print(f"{G.edges()}")
 print(f"degrees G : {[G.degree(x) for x in G.nodes()]}")
-print(tree_width(G))
-# print(f"proximity G: {proximity(G)}")
-# print(f"remoteness G: {remoteness(G)}")
+print(f"proximity G: {minmax_mean_distance(G,'proximity')}")
+print(f"remoteness G: {minmax_mean_distance(G,'remoteness')}")
+print(f"tree_width G: {tree_width(G)}")
+print(f"var G: {var_degree(G)}")
+print(f"girth G: {girth(G)}")
+
 print("--------------------")
 
 options = {
