@@ -71,9 +71,16 @@ William \textsc{Karpinski}\\
 
 \newpage
 
-\section{Introduction}
+\section{Introduction et Problématique}
 Ce rapport s'inscrit dans le cadre d'un stage d'initiation à la recherche dans le service d'algorithmie
-dirigé par M.Hadrien Mélot. Dans ce stage, supervisé par Sébastien Bonte, j'ai été ammené à travailler sur plusieurs invariants de graphes, et plus spécifiquement sur le tree width de graphes simple non-orienté.
+dirigé par M.Hadrien Mélot sous la supervisation de Sébastien Bonte.
+
+Tout au long ce stage, j'ai été ammené à travailler sur plusieurs invariants
+de graphes, et plus spécifiquement sur le treewidth de graphes simple non-orienté.
+Tous les invariants ont été calculés sur des graphes d'ordre 2 à 10.
+J'ai également été ammené à comparer l'efficacité des algorithmes dans 
+deux langages de programmations, le Rust et le Python.
+
 
 \section{Notions de base}
 Dans ce rapport, nous allons définir $G$, un graphe simple non-orienté comme étant composé de
@@ -86,21 +93,88 @@ Soient $T$, une décomposition en arbre de $G$,
 $X_1,...,X_t$, les sous-ensembles de $V$ dans les noeuds de $T$, nous avons que:
 
 \begin{itemize}
-  \item Tous les sommets de $G$ doivent être dans au moins un noeud de $T$
-  \item Si $$ et $$
+  \item Tous les sommets de $G$ doivent être dans au moins un noeud de $T$.
+  \item Si $X_i$ et $X_j$ contiennent un somment v, alors tous les noeuds du chemein entre $X_i$ et $X_j$ dans $T$ contiennent v.
+  \item Pour toutes les arêtes (v,w) dans $E$, il existe au moins un noeud de
+    $T$ contenant v et w. À noter qu'un noeud de $T$ peut contenir deux sommets de $V$ sans qu'il y aie d'arête entre eux.
 \end{itemize}
+
+Un graphe est dit cordal si pour chaque cycle ayant 4 sommets ou plus dans celui-ci, il existe une arête liant deux sommets non adjacents du cycle.
+
+Une clique est un sous ensemble d'aretes de $V$ tel que les sommets du sous-ensemble sont connectés deux à deux. Une clique maximal d'un graphe $G$ est une clique tel qu'il n'en nexiste pas d'autres dans $G$ avec plus de sommets.  Le nombre de sommets dans une clique maximale est notée $\omega(G)$
+
+
+ 
 
 \section{Tree Width}
 
+On appelle la largeur, ou width, d'une décomposition en arbre d'un graphe 
+comme étant le nombre de sommets contenu dans le noeud de $T$ en contenant 
+le plus, moins un. La largeur d'arborescence ou treewidth sera la largeur 
+minimum parmis toutes les décompositions en arbre possibles de $G$.
+Intuitivement, on peut dire que le treewidth d'un graphe définit à quel point
+celui-ci est proche d'un arbre, le treewidth d'un arbre étant 1 et celui d'un
+graphe complètement connecté est n-1, n l'ordre de $G$.
 
-Explication du tree width
-Tree Decomp
-Tree Width = minimum de toutes les width des tree decomp dun graph
+Le treewidth peut également être caractérisé d'autres manières qui seront expliquées ultérieurement si utilisés dans les algoritmes.
+
+Le problème de calcul du treewidth est un problème NP-Difficile, 
+la problématique ici va donc se concentrer sur comment calculer
+efficacement celui-ci.
 
 \subsection{Méthode Naïve}
-Enumération de toutes les possibilités de tree decomp
-Extremememnt lent O(n!)
-Ajout d'un lower bound => /4 le temps mais tjrs pas suffisant
+L'algorithme utilisé dans cette section utillise une autre définition de treewidth, celle-ci étant que le treewidth de $G$ est la taille de la plus grande clique du graph cordal contenant $G$ ayant le plus petit $\omega(G)$, moins un.
+
+% Intuition %
+La marche à suivre ici serait de vouloir lister tous les graphes cordaux contennant $G$ et
+calculer à chaque fois la taille de sa plus grande clique. Ensuite nous prendrions le minimum parmis ces tailles et nous obtiendrons le treewidth en le soustrayant de un.
+
+Ici l'algorithme s'occupera différement la première étape, en effet nous allons
+calculer la taille de la clique maximale en même temps que de créer le graphe cordal. 
+De plus nous allons calculer les tailles de cliques moins un à partir des voisins d'un 
+noeud, le moins un dans le calcul du treewdith est implicite tout au long des calculs.
+
+
+%Explication detaillée %
+L'algorithme fonctionne comme suit, considérons que les sommets de $G$ soient numérotés 
+de 0 à n-1, n étant l'ordre de $G$ et nous voulons calculer les graphes cordaux
+pouvant être créés à partir de $G$.
+
+Nous allons donc itérer sur les sommets de $G$, notons $i$ le sommet courant, et allons
+explorer tout les voisins de i ayant un numéro strictement supérieur à ce 
+dernier, notons j le voisin courant.
+
+Si le voisin j est le premier voisin exploré parmis tous ceux de i,notons le first, 
+nous allons ajouter une arêtes entre lui et tous les voisins de j. 
+
+Cela permettra 2 choses, tout d'abord cela la création du graphe cordal
+car tous les cycles partant de i auront une corde entre le voisin j de i et first.
+S'il n'existait pas d'aretes entre j et first, alors nous devons l'ajouter car s'il exister un cycle contenant i,j et first de taille supérieure à 4 il faudra que first et j possède une corde pour que le graphe devienne cordal.
+
+La seconde chose que cela permet de calculer la taille de la clique maximal du graphe
+cordal. En ajoutant les aretes nous comptons les voisins de i et lorsque i sera un
+sommet auquel on a ajouter une ou plusieurs aretes celui ci comptera les voisins 
+supplémentaires et donc la tailles des cliques maximales pouvant etre générés
+avec les cordes à disposition. En retirant le noeud i du compte on obtient bien la taille de la clique maximale moins 1 ce qui si est minimal parmis tous les graphes cordaux correspond bien au treewidth.
+
+Pour obtenir le treewidth nous devons exploré tous les graphes cordaux possibles, 
+nous allons réattribuer les nombres associés à chaque sommet et aisni change
+l'ordre dexploration.
+De ce fait, les aretes ajoutées entre les graphes seront différentes et ainsi nous 
+pourront explorer toutes les possibilités en prenant toutes les permutations possibles 
+des noeuds. Il nous suffit de prendre le minimum des tailles maxiamles de cliques pour 
+tous les graphes cordaux trouver et nous obtiendrons le treewisdth.
+
+
+
+l'algo est en temps factoriel parce que on enumere toutes les possibilité sur tous les sommets
+
+L'ajout d'un lower bound peut aider l'algorithme dans pas mal de cas, stopper l'algorithme quand on a trouvé une taille de clqiue egale au lowerbound permet de ne pas itérer sur toutes les
+permutations
+Cependant il n'est pas sur qu'on atteigne ce lowerbound, ce qui se produit fréquemment sur les graphes de grand o au plusrdre donc l'algorithme reste très peu efficace, bien que sur les graphes d'ordres inférieurs à 7 le lower bound permet de diviser par 4 le temps d'execution.
+
+Pseudo-code;
+\#TODO
 
 \subsection{Notions Complémentaires}
 Prochains algos viennent d'un papier qui introduit quelques notions supplementaire
