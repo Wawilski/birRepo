@@ -4,9 +4,9 @@
 \contentsline {section}{\numberline {3}Tree Width}{2}{section.3}%
 \contentsline {subsection}{\numberline {3.1}Méthode Naïve}{3}{subsection.3.1}%
 \contentsline {subsection}{\numberline {3.2}Notions Complémentaires}{4}{subsection.3.2}%
-\contentsline {subsection}{\numberline {3.3}Meilleur Algorithme}{4}{subsection.3.3}%
-\contentsline {subsection}{\numberline {3.4}Algorithme Récursif}{4}{subsection.3.4}%
-\contentsline {subsection}{\numberline {3.5}Algorithme Récursif Amélioré}{4}{subsection.3.5}%
-\contentsline {section}{\numberline {4}Autres Invariants}{5}{section.4}%
-\contentsline {section}{\numberline {5}Comparaison Python/Rust}{5}{section.5}%
-\contentsline {section}{\numberline {6}Conclusion}{5}{section.6}%
+\contentsline {subsection}{\numberline {3.3}Meilleur Algorithme}{6}{subsection.3.3}%
+\contentsline {subsection}{\numberline {3.4}Algorithme Récursif}{6}{subsection.3.4}%
+\contentsline {subsection}{\numberline {3.5}Algorithme Récursif Amélioré}{8}{subsection.3.5}%
+\contentsline {section}{\numberline {4}Autres Invariants}{8}{section.4}%
+\contentsline {section}{\numberline {5}Comparaison Python/Rust}{8}{section.5}%
+\contentsline {section}{\numberline {6}Conclusion}{9}{section.6}%

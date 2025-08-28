@@ -174,23 +174,238 @@ permutations
 Cependant il n'est pas sur qu'on atteigne ce lowerbound, ce qui se produit fréquemment sur les graphes de grand o au plusrdre donc l'algorithme reste très peu efficace, bien que sur les graphes d'ordres inférieurs à 7 le lower bound permet de diviser par 4 le temps d'execution.
 
 Pseudo-code;
-\#TODO
+
+The \verb|algorithm| environment is a \emph{float}, like \verb|table| and \verb|figure|, so you can add float placement modifiers \verb|[hbt!]| after \verb|\begin{algorithm}| if necessary.
+
+\begin{algorithm}[hbt!]
+\caption{Naive Algorithm Tree Width}\label{alg:tree_width}
+\begin{algorithmic}
+  \Require{G(V,E): Graphe avec V comme ensemble de sommets et E comme ensemble d'arêtes}
+  \Ensure{Tree Width du graphe}
+  \State $n \gets V.size$
+  \State $tw \gets n$;
+  \State $lw \gets lowerbound$
+  \For{permutations dans V}
+    \State $C(W,F) \gets copie de G avec sommets renomms$
+    \State $nMaxDeg \gets 0$
+
+    \For{i allant de 0 à n} \do
+      \State $nDeg \gets 0$
+      \For {j allant de i+1 à n} \do
+        
+        \If{(i,j) dans F}
+          
+          \State $nDeg \gets nDeg + 1$
+
+          \If{j > i+1}
+            \State Ajouter arêtes (i+1,j) dans F
+          \EndIf
+        \EndIf
+      \EndFor
+
+      \If{nDeg > nMaxDeg}
+        \State $nMaxDeg \gets nDeg$
+      \EndIf
+    \EndFor
+    \If {nMaxDeg < tw}
+      \State $tw \gets nMaxDeg$
+    \EndIf
+  \EndFor
+
+  \Return{tw}
+\end{algorithmic}
+\end{algorithm}
 
 \subsection{Notions Complémentaires}
-Prochains algos viennent d'un papier qui introduit quelques notions supplementaire
-Probleme d'ordo linéaire
-TW()
-Q, R, P
+
+Les prochains algorithmes sont bien plus efficaces que l'algorithme naïf 
+mais utilisent des propriétés plus complexes qui vont être expliquées 
+dans cette section. Toutes les propriétés énoncés proviennent de la 
+référence suivante, et sont prouvé dans celle-ci. Ici nous ne feront que 
+les énoncés et donner une intuition pour pouvoir comprendre les algorithmes.
+
+Le problème de calcul du treeWidth peut etre formulé comme un probleme
+d'ordonnancement de ses sommets.
+Sachant qu'un ordonnancement $\pi$ de G(V,E) est une bijection 
+$\pi$:V ->{1,2..|V|} notons $\pi_{(<,v)}$ lensemble des sommets qui 
+apparaissent avant le sommet v dans l'ordonnancement $\pi$.
+
+Pour un graphe G et un ordonnancement $\pi$, si $\pi$ à la propriété qie lensemble pour chaque i de $\pi$ tel que
+
+$\{\pi^{-1}(j) | \{\pi^{-1}(i),\pi^{-1}(j)\} \in E \wedge j > i\}$ forme une clique,
+
+alors $\pi$ défini une triangulation H de G et donc utiliser la definition du
+treewidth avec les graphes cordaux
+
+Cependant pour eviter d'utiliser explicitement les triangulations dans nos 
+algorithmes, 
+sont definis dans le papier:
+Pour un certain ordonnancement $\pi$: 
+
+Soit P(v,w) qui est vrai ssi il y a un chemin de v à w qui n'utilise que 
+des sommets de $\pi_{(<,w)} \cap \pi_{(<,v)}$, donc tjrs vrai si v = w ou 
+(v,w) $\subseteq$ E.
+
+Soit R(v) qui est defini comme le nombre de sommets w tq {($\pi$(w) > $\pi$(v)) 
+
+and P(v,w)}
+
+Il est prouvé que tw(G) est <= k ssi il existe un 
+ordonnancement $\pi$ tq R(v) <= k pour tout v 
+
+En complément nous avons que pour $\pi$, R(v) = |Q(i(<,v),v)| avec Q(S,v) le 
+nombre de sommets w appartenant à V-S-{v} tel qu'il existe un chemin de
+v à w utilisant les uniquement les sommets de S,v et w 
+
+Aussi noous avons
+TW(S) = min (parmis tous les i ordonnancement de V) max 
+(parmis tous les v dans S) |Q(i(<,v),v)| S étant un subset de V
+Tel que prouvé dans le papier, on a la propriété que tw(G) = TW(V)
+
 \subsection{Meilleur Algorithme}
-TW(S) = min max{TW(S-{v}),|Q(S-{v},v)|}
-Basé la desus
+
+L'algorithme ici présenté se base sur la propriété suivante:
+\begin{equation}
+  TW(S) = \min{v \in S} max \{ TW(S-\{ v \}), |Q(S-\{v\},v)| \}
+\end{equation}
+
+Sachant que TW(V) = tw(G) nous allons vouloir explorer les subsets
+S $\subseteq$ V de taille 1 et calculer le TW(S). Puis nous ajouterons des
+sommets v de V aux subsets, de sorte à obtenir tous les subsets de taille 2 et nous utiliserons la propriété pour trouver TW(S + \{v\}), pour tous les subsets S. Nous réitérons cela jusqu'a la taille n ce qui nous donnera TW(V) et donc tw(G).
+
+L'algorithme présenté fonctionne comme énoncé ci dessus, soit i la taille courante des subsets. 
+Les différents subsets S des rangs i-1 sont stockés dans une liste, tw\_prev,avec TW(S) et qui à la fin de l'algorithme stockera, si elle existe, la paire
+(V,TW(V)). Cette liste est par defaut initialisée avec la paire
+$(\emptyset,-\infty)$, donc le subset de taille 0 et une valeur suffisament pour que les TW(S) du rang 1 ne privilégie jamais le TW($\emptyset$).
+Lorsque nous allons ajouter les différents subsets de taille i, il se peut qu'on obtiennet plusieurs fois le meme, il faut donc vérifier avant d'insérer TW(S) dans la liste s'il existe déja un élémént contenant le subset S et si cest le cas prendre comme TW(S) le maximum entre la valeur présente et celle qu'on veut ajouter
+
+Pour améliorer le temps de calcul si q > a un upperbound fixer au préalable
+nous nallons pas calculer la valeur de TW(S) pour le subset courant cette 
+valeur ne pouvant qu'augmenter
+
+Lorsque nous avons fini d'itérer si nous avons dans la liste TW(V) on retourne sa valeur
+sinon on retourne l'upperbound fixé au préalable
+
+L'algorithme est de complexité $O(2^n)$ en temps et en espace
+
+
+Pseudo-code:
+
+\begin{algorithm}[hbt!]
+\caption{Improved Algorithm}\label{alg:twdp}
+\begin{algorithmic}
+  \Require{G(V,E): Graphe avec V comme ensemble de sommets et E comme ensemble d'arêtes}
+  \Ensure{Tree Width du graphe}
+  \State $n \gets V.size$
+  \State $upperbound \gets n-1$;
+  \State $tw\_pred \gets [(\emptyset, -\infty)] $
+  \For{\_ allant de 0 à n} \do
+
+    \State $tw\_current \gets []$
+
+    \For{$(S,tw) \subseteq tw\_pred$} \do
+
+      \For{$v \in V-S$} \do
+
+            \State $r \gets max\{tw, |Q(S,v)|\}$
+
+          \If{r < up}
+
+            \If{ $ (\S \cup \{v\}, t) \subseteq tw\_current$}
+
+              \State Set $t \gets min\{t,r\}$ 
+
+            \Else
+
+              \State Insérer\ $(S \cup \{v\}, r)$ dans tw\_current
+            \EndIf
+            
+          \EndIf
+      \EndFor
+    \EndFor
+    \State Set $tw\_pred = tw\_current$
+  \EndFor
+
+  \If {$(V,x) \in tw_pred $}
+
+    \Return x
+  \Else
+  
+   \Return up
+  \EndIf
+  
+  \Return{tw}
+\end{algorithmic}
+\end{algorithm}
+
+
 \subsection{Algorithme Récursif}
 TWR(L,S) = min max Q(L U i(<,v),v),
 TWR([],V) = TW[V] = tw(G)
 => Calcule de TWR sur [],V pour trouver tw(G)
+
+
+
+Soient L et S des subsets de V disjoints
+
+Definissons TWR(L,S) = min (parmis tous les i ordonnancement de V) max (parmis tous les v dans S) |Q(( L||i(<,v) ),v)|
+
+Ici nous avons que l'ensemble des sommets dans L est avant S dans l'ordonnancement et les sommets qui ne sont ni dans L ni dans S sont apres S.
+
+Il s'agit d'un algorithme recursif avec:
+
+Cas de base S.len() == 1:
+  Si nous avons ce cas, nous a que S = {v} et nous savons que TWR(L,{v}) = Q(L,v) (L contient toutes les valeurs a gauche de v car tous les sommets ni dans L ni dans S sont apres S comme énoncé précédemment) nous pouvons donc dans ce casa retourner la valeur de Q(L,v) 
+Cas général;
+Il est montré dans le papier que TWR(L,S)= min (parmi tout les subsets S' de taille k de S) max{TWR(L,S'),TWR(L || S', S-S')} 
+
+Nous allons donc utiliser cette propriété pour recursivement diminuer la taille de S pour arriver à une taille de 1 et obtenir notre cas de base et ainsi retourner TWR.
+
+Pour obtenir tw(G) via cet algorithme il faut l'appeler sur TW([],V)
+Car ici nous avons TW([],V) = TW(V) = tw(G)
+
+Lalgorithme est en $O(4^n)$ en temps et polynomial en espace 
+
+Pseudo-code:
+\begin{algorithm}[hbt!]
+\caption{Recursive}\label{alg:tw_rec}
+\begin{algorithmic}
+\Require{G(V,E): Graphe avec V comme ensemble de sommets et E comme ensemble d'arêtes
+         
+         L: subsets de V
+
+         S: subsets de V
+         
+         lowerbound
+         }
+\Ensure{Tree Width du graphe}
+
+  \State $n \gets V.size$
+  \If {S.size == 1}:
+  
+   \Return |Q(L,S)|
+  \EndIf
+  
+  \State $tw \gets \infty$
+
+  \For{$Sub \subseteq S$ avec S.size == n/2} \do
+
+    \State $v1 \gets Recursive(G,L,Sub)$
+    \State $v2 \gets Recursive(G,L \cup Sub,S-Sub)$
+    
+    \State Set $tw = min\{tw,max\{v1,v2\}\}$
+  
+  \EndFor
+
+  \State \Return tw
+\end{algorithmic}
+\end{algorithm}
+
+
 \subsection{Algorithme Récursif Amélioré}
 dit si tw(G) au plus = k
 se base sur les composantes connexes du graphes et si leur tw <= k
+
 
 \section{Autres Invariants}
 Variance des degres,Proximity/Remoteness,Girth
